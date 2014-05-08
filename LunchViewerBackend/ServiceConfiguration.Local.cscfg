@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="LunchViewerBackend" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2014-01.2.3">
+  <Role name="EmailProcessor">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=lunchviewerbackend;AccountKey=gwMtrpVNv4cMF9vBrfSn/A4hHO+G1lPW734+9muwcetYeoR81Qvg68LYA+qSNzGscnn/xdFqwnAkwgLD6SUGJQ==" />
+      <Setting name="StorageConnectionString" value="DefaultEndpointsProtocol=https;AccountName=lunchviewerbackend;AccountKey=gwMtrpVNv4cMF9vBrfSn/A4hHO+G1lPW734+9muwcetYeoR81Qvg68LYA+qSNzGscnn/xdFqwnAkwgLD6SUGJQ==" />
+      <Setting name="NotificationHubConnectionString" value="Endpoint=sb://lunchviewerhub-ns.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=cygTY6MmfEgS+YMpqEZGZ2qvK/pM2oAUip4DqV1PuuU=" />
+      <Setting name="NotificationHubName" value="lunchviewhub" />
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>
