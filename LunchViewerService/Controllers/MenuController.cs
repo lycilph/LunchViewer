@@ -1,5 +1,5 @@
 ﻿using Microsoft.WindowsAzure.Mobile.Service;
-using ModelLibrary;
+using Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -15,6 +15,7 @@ namespace lunchviewerService.Controllers
         protected override void Initialize(HttpControllerContext controllerContext)
         {
             base.Initialize(controllerContext);
+            ControllerHelper.InitializeConnectionString("StorageConnectionString", Services);
             DomainManager = new StorageDomainManager<MenuEntity>("StorageConnectionString", "Menus", Request, Services);
         }
 

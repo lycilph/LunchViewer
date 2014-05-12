@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>2.3</ProductVersion>
-    <ProjectGuid>72663985-5c02-478a-97de-94cc881ee72e</ProjectGuid>
+    <ProjectGuid>5281f4d5-9aa4-4354-9438-950beb3b907f</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LunchViewerBackend</RootNamespace>
@@ -39,7 +39,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EmailProcessor\EmailProcessor.csproj">
       <Name>EmailProcessor</Name>
-      <Project>{5be82607-8f71-4f8c-90f5-8d70101fc68b}</Project>
+      <Project>{13d9bdf1-758d-4fa3-a5ed-66d1d6da3b13}</Project>
       <Private>True</Private>
       <RoleType>Worker</RoleType>
       <RoleName>EmailProcessor</RoleName>
@@ -56,7 +56,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PublishProfile Include="Profiles\LunchViewerBackendStaging.azurePubxml" />
+    <PublishProfile Include="Profiles\LunchViewerBackendProduction.azurePubxml" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>

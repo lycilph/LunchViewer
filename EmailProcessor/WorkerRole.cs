@@ -1,21 +1,15 @@
-using HtmlAgilityPack;
 using MailKit;
 using MailKit.Net.Imap;
-using Microsoft.ServiceBus.Notifications;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
-using MimeKit;
-using ModelLibrary;
+using Models;
 using System;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace EmailProcessor
 {
@@ -27,7 +21,6 @@ namespace EmailProcessor
 
         public override void Run()
         {
-            // This is a sample worker implementation. Replace with your logic.
             Trace.TraceInformation("EmailProcessor entry point called");
 
             while (true)
@@ -39,7 +32,11 @@ namespace EmailProcessor
                 {
                     using (var client = new ImapClient())
                     {
-                        var credentials = new NetworkCredential("firstlast_lunchviewer@outlook.com", "k4hfjf93JK3");
+                        var aes = new SimpleAES();
+                        var email_address = aes.Decrypt("1yXS2FR8fVtTXD/WUuigNrq2zwcXVb9yL1xxCX2ufIpyBI6vg8cgKByASwm8h9nm");
+                        var email_password = aes.Decrypt("VyE2LIjIhRIQLl1VvkAknw==");
+
+                        var credentials = new NetworkCredential(email_address, email_password);
                         var uri = new Uri("imaps://imap-mail.outlook.com");
 
                         using (var cancel = new CancellationTokenSource())
@@ -70,20 +67,20 @@ namespace EmailProcessor
                                 {
                                     var message = inbox.GetMessage(summary.Index);
 
-                                    if (IsValidMenuMail(message))
+                                    if (EmailHelper.IsValidMenuMail(message))
                                     {
                                         Trace.TraceInformation("[Mail] {0:D2}: {1}", summary.Index, message.Subject);
 
                                         Menu menu;
-                                        if (TryParseMessage(message, out menu))
+                                        if (EmailHelper.TryParseMessage(message, out menu))
                                         {
                                             SaveMenu(menu);
-                                            SendNotification(menu).Wait();
+                                            NotificationsHelper.SendNotification(menu);
                                         }
                                     }
                                     else
                                     {
-                                        var error_message = string.Format("Not a valid menu mail (subject {0})",  message.Subject);
+                                        var error_message = string.Format("Not a valid menu mail (subject {0})", message.Subject);
 
                                         AddError("Invalid Mail", error_message);
                                         Trace.TraceInformation(error_message);
@@ -140,96 +137,11 @@ namespace EmailProcessor
             error_table.CreateIfNotExists();
         }
 
-        private static async Task SendNotification(Menu menu)
-        {
-            var hub_connection_string = RoleEnvironment.GetConfigurationSettingValue("NotificationHubConnectionString");
-            var hub_name = RoleEnvironment.GetConfigurationSettingValue("NotificationHubName");
-            var hub = NotificationHubClient.CreateClientFromConnectionString(hub_connection_string, hub_name, true);
-
-            var registrations = await hub.GetAllRegistrationsAsync(Int32.MaxValue);
-            Trace.TraceInformation("Found {0} registrations", registrations.Count());
-
-            if (registrations.Any())
-            {
-                var message = string.Format("Processed new menu ({0}, {1})", menu.MenuEntity.Year, menu.MenuEntity.Week);
-                var notification = new WindowsNotification(message);
-                notification.Headers.Add("X-WNS-Type", "wns/raw");
-
-                var outcome = await hub.SendNotificationAsync(notification);
-                Trace.TraceInformation("Notification outcome {0}", outcome.State);
-            }
-        }
-
         private void AddError(string type, string message)
         {
             var error = new ErrorEntity(type, message);
             var op = TableOperation.Insert(error);
             error_table.Execute(op);
-        }
-
-        private static bool TryParseMessage(MimeMessage message, out Menu menu)
-        {
-            menu = null;
-
-            foreach (var part in message.BodyParts)
-            {
-                Trace.TraceInformation(" - {0} {1}", part.ContentType.MediaType, part.ContentType.MediaSubtype);
-                if (part.ContentType.MediaType == "text" && part.ContentType.MediaSubtype == "html")
-                {
-                    var text_part = part as TextPart;
-                    if (text_part == null)
-                        return false;
-
-                    var doc = new HtmlDocument();
-                    doc.LoadHtml(text_part.Text);
-
-                    // Find current year and week for the message
-                    var week = -1;
-                    var matches = Regex.Matches(doc.DocumentNode.InnerText, @"(Menuer i denne uge) (\d*)", RegexOptions.IgnoreCase);
-                    if (matches.Count > 0)
-                        week = int.Parse(matches[0].Groups[2].ToString());
-                    var year = DateTime.Now.Year;
-
-                    menu = new Menu(year, week);
-
-                    // Find the individual items (or days)
-                    var items = doc.DocumentNode.Descendants().Where(n => n.Name == "td" &&
-                                                                  n.Attributes.Contains("class") &&
-                                                                  n.Attributes["class"].Value == "productItem");
-
-                    // Parse item
-                    foreach (var item in items)
-                    {
-                        var rows = item.Descendants("tr").Select(n => n.InnerText.Trim()).Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
-                        var date = DateTime.ParseExact(rows[0], "dddd 'd.' d. MMMM", CultureInfo.CreateSpecificCulture("da-DK"));
-                        var text = string.Format("{0} {1}", HtmlEntity.DeEntitize(rows[3]).Trim(), HtmlEntity.DeEntitize(rows[4]).Trim());
-
-                        Trace.TraceInformation("-----------------------------------------------------------------------");
-                        Trace.TraceInformation(date.ToString("dddd 'd.' d. MMMM", CultureInfo.CreateSpecificCulture("da-DK")));
-                        Trace.TraceInformation(text);
-
-                        menu.Add(date, text);
-                    }
-
-                    return true;
-                }
-
-                Trace.TraceInformation(" --- Wrong content type");
-            }
-
-            return false;
-        }
-
-        private static bool IsValidMenuMail(MimeMessage message)
-        {
-            if (message.From.Count != 1)
-                return false;
-
-            var mailbox = message.From[0] as MailboxAddress;
-            if (mailbox == null)
-                return false;
-
-            return string.Compare(mailbox.Address, "oticon@wip.dk", StringComparison.InvariantCultureIgnoreCase) == 0;
         }
 
         private void SaveMenu(Menu menu)
