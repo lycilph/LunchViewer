@@ -1,8 +1,8 @@
 ﻿using Microsoft.WindowsAzure.Mobile.Service;
 
-namespace lunchviewerService.Controllers
+namespace lunchviewerService.Utils
 {
-    public static class ControllerHelper
+    public static class ConnectionStringUtil
     {
         static bool connection_string_initialized = false;
 

@@ -3,10 +3,10 @@
   <Role name="EmailProcessor">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=lunchviewerbackend;AccountKey=gwMtrpVNv4cMF9vBrfSn/A4hHO+G1lPW734+9muwcetYeoR81Qvg68LYA+qSNzGscnn/xdFqwnAkwgLD6SUGJQ==" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="StorageConnectionString" value="DefaultEndpointsProtocol=https;AccountName=lunchviewerbackend;AccountKey=gwMtrpVNv4cMF9vBrfSn/A4hHO+G1lPW734+9muwcetYeoR81Qvg68LYA+qSNzGscnn/xdFqwnAkwgLD6SUGJQ==" />
       <Setting name="NotificationHubName" value="lunchviewerservicehub" />
-      <Setting name="NotificationHubConnectionString" value="Endpoint=sb://lunchviewerhub-ns.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=cygTY6MmfEgS+YMpqEZGZ2qvK/pM2oAUip4DqV1PuuU=" />
+      <Setting name="NotificationHubConnectionString" value="Endpoint=sb://lunchviewerservicehub-ns.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=sDAXhC7vwL76xCVL4VistV5tp4cgwnashuj2bA7MNA4=" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

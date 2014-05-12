@@ -75,7 +75,7 @@ namespace EmailProcessor
                                         if (EmailHelper.TryParseMessage(message, out menu))
                                         {
                                             SaveMenu(menu);
-                                            NotificationsHelper.SendNotification(menu);
+                                            //NotificationsHelper.SendNotification(menu);
                                         }
                                     }
                                     else
