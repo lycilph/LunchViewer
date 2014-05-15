@@ -14,9 +14,9 @@ namespace Models
             ItemEntities = new List<ItemEntity>();
         }
 
-        public void Add(DateTime date, string text)
+        public void Add(DateTime date, string text, string link)
         {
-            ItemEntities.Add(new ItemEntity(date, text, MenuEntity.MenuId));
+            ItemEntities.Add(new ItemEntity(date, text, link, MenuEntity.MenuId));
         }
     }
 }

@@ -56,7 +56,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PublishProfile Include="Profiles\LunchViewerBackendProduction.azurePubxml" />
+    <PublishProfile Include="Profiles\LunchViewerBackendStaging.azurePubxml" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>

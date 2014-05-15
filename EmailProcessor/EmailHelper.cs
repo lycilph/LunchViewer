@@ -20,7 +20,6 @@ namespace EmailProcessor
 
             foreach (var part in message.BodyParts)
             {
-                //Trace.TraceInformation(" - {0} {1}", part.ContentType.MediaType, part.ContentType.MediaSubtype);
                 if (part.ContentType.MediaType == "text" && part.ContentType.MediaSubtype == "html")
                 {
                     var text_part = part as TextPart;
@@ -41,8 +40,8 @@ namespace EmailProcessor
 
                     // Find the individual items (or days)
                     var items = doc.DocumentNode.Descendants().Where(n => n.Name == "td" &&
-                                                                  n.Attributes.Contains("class") &&
-                                                                  n.Attributes["class"].Value == "productItem");
+                                                                     n.Attributes.Contains("class") &&
+                                                                     n.Attributes["class"].Value == "productItem");
 
                     // Parse item
                     foreach (var item in items)
@@ -50,12 +49,9 @@ namespace EmailProcessor
                         var rows = item.Descendants("tr").Select(n => n.InnerText.Trim()).Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
                         var date = DateTime.ParseExact(rows[0], "dddd 'd.' d. MMMM", CultureInfo.CreateSpecificCulture("da-DK"));
                         var text = string.Format("{0} {1}", HtmlEntity.DeEntitize(rows[3]).Trim(), HtmlEntity.DeEntitize(rows[4]).Trim());
+                        var link = item.Descendants("a").Select(n => n.Attributes["href"].Value).Single();
 
-                        //Trace.TraceInformation("-----------------------------------------------------------------------");
-                        //Trace.TraceInformation(date.ToString("dddd 'd.' d. MMMM", CultureInfo.CreateSpecificCulture("da-DK")));
-                        //Trace.TraceInformation(text);
-
-                        menu.Add(date, text);
+                        menu.Add(date, text, link);
                     }
 
                     return true;

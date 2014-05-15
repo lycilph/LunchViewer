@@ -1,27 +1,16 @@
 ﻿using LunchViewerApp.Common;
-using LunchViewerApp.Models;
 using Microsoft.WindowsAzure.MobileServices;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Globalization;
+using System.Windows.Input;
 using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.Resources;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
 using Windows.Networking.PushNotifications;
-using Windows.UI.Core;
-using Windows.UI.ViewManagement;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Universal Hub Application project template is documented at http://go.microsoft.com/fwlink/?LinkID=391955
@@ -38,10 +27,22 @@ namespace LunchViewerApp
             get { return navigation_helper; }
         }
 
+        public MenuViewModel PreviousWeekMenu { get; set; }
+        public MenuViewModel CurrentWeekMenu { get; set; }
+        public MenuViewModel NextWeekMenu { get; set; }
+
+        public ICommand UpdateMenusCommand { get; set; }
+
         public HubPage()
         {
             InitializeComponent();
             DataContext = this;
+
+            PreviousWeekMenu = new MenuViewModel("Previous (Week {0})");
+            CurrentWeekMenu = new MenuViewModel("Current (Week {0})");
+            NextWeekMenu = new MenuViewModel("Next (Week {0})");
+
+            UpdateMenusCommand = new RelayCommand(UpdateMenus);
 
             //RegisterBackgroundTask();
 
@@ -55,20 +56,23 @@ namespace LunchViewerApp
             navigation_helper.SaveState += this.NavigationHelper_SaveState;
         }
 
-        private async void RefreshMenus()
+        private async void UpdateMenus()
         {
-            // This code refreshes the entries in the list view be querying the TodoItems table.
-            // The query excludes completed TodoItems
-            try
-            {
-                var menu_table = App.MobileService.GetTable<Menu>();
-                var menus = await menu_table.ToListAsync();
-                System.Diagnostics.Debug.WriteLine("Found {0} menus", menus.Count());
-            }
-            catch (MobileServiceInvalidOperationException)
-            {
-                //MessageBox.Show(e.Message, "Error loading items", MessageBoxButton.OK);
-            }
+            await MenuDownloader.Execute();
+            LoadMenus();
+        }
+
+        private void LoadMenus()
+        {
+            if (PreviousWeekMenu.Week != WeekUtils.PreviousWeekNumber)
+                PreviousWeekMenu.LoadAsync(WeekUtils.PreviousWeekNumber);
+            if (CurrentWeekMenu.Week != WeekUtils.CurrentWeekNumber)
+                CurrentWeekMenu.LoadAsync(WeekUtils.CurrentWeekNumber);
+            if (NextWeekMenu.Week != WeekUtils.NextWeekNumber)
+                NextWeekMenu.LoadAsync(WeekUtils.NextWeekNumber);
+
+            if (CurrentWeekMenu.Items.Any())
+                CurrentWeekMenu.Items.First().IsToday = true;
         }
 
         private async void RegisterBackgroundTask()
@@ -97,7 +101,6 @@ namespace LunchViewerApp
             BackgroundTaskRegistration task_registration = builder.Register();
         }
 
-
         /// <summary>
         /// Populates the page with content passed during navigation.  Any saved state is also
         /// provided when recreating a page from a prior session.
@@ -109,13 +112,9 @@ namespace LunchViewerApp
         /// <see cref="Frame.Navigate(Type, object)"/> when this page was initially requested and
         /// a dictionary of state preserved by this page during an earlier
         /// session.  The state will be null the first time a page is visited.</param>
-        private /*async*/ void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            // TODO: Create an appropriate data model for your problem domain to replace the sample data
-            //var sampleDataGroups = await SampleDataSource.GetGroupsAsync();
-            //this.DefaultViewModel["Groups"] = sampleDataGroups;
-
-            RefreshMenus();
+            LoadMenus();
         }
 
         /// <summary>
@@ -132,31 +131,21 @@ namespace LunchViewerApp
         }
 
         /// <summary>
-        /// Shows the details of a clicked group in the <see cref="SectionPage"/>.
-        /// </summary>
-        /// <param name="sender">The source of the click event.</param>
-        /// <param name="e">Details about the click event.</param>
-        private void GroupSection_ItemClick(object sender, ItemClickEventArgs e)
-        {
-        //    var groupId = ((SampleDataGroup)e.ClickedItem).UniqueId;
-        //    if (!Frame.Navigate(typeof(SectionPage), groupId))
-        //    {
-        //        throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
-        //    }
-        }
-
-        /// <summary>
         /// Shows the details of an item clicked on in the <see cref="ItemPage"/>
         /// </summary>
         /// <param name="sender">The source of the click event.</param>
         /// <param name="e">Defaults about the click event.</param>
-        private void ItemView_ItemClick(object sender, ItemClickEventArgs e)
+        private void ItemClick(object sender, ItemClickEventArgs e)
         {
-        //    var itemId = ((SampleDataItem)e.ClickedItem).UniqueId;
-        //    if (!Frame.Navigate(typeof(ItemPage), itemId))
-        //    {
-        //        throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
-        //    }
+            var item = e.ClickedItem as ItemViewModel;
+            if (!Frame.Navigate(typeof(ItemPage), item))
+                throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
+        }
+
+        private void HomeClick(object sender, RoutedEventArgs e)
+        {
+            var first_section = hub_control.Sections[0];
+            hub_control.ScrollToSection(first_section);
         }
 
         #region NavigationHelper registration
@@ -175,12 +164,12 @@ namespace LunchViewerApp
         /// <param name="e">Event data that describes how this page was reached.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            this.navigation_helper.OnNavigatedTo(e);
+            navigation_helper.OnNavigatedTo(e);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            this.navigation_helper.OnNavigatedFrom(e);
+            navigation_helper.OnNavigatedFrom(e);
         }
 
         #endregion

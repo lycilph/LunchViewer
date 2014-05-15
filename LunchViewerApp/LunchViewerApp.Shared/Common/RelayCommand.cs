@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace LunchViewerApp.Common
@@ -28,10 +24,7 @@ namespace LunchViewerApp.Common
         /// Creates a new command that can always execute.
         /// </summary>
         /// <param name="execute">The execution logic.</param>
-        public RelayCommand(Action execute)
-            : this(execute, null)
-        {
-        }
+        public RelayCommand(Action execute) : this(execute, null) { }
 
         /// <summary>
         /// Creates a new command.

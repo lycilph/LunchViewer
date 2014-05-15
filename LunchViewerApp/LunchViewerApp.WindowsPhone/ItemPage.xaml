@@ -32,14 +32,14 @@
 
         <!-- TitlePanel -->
         <StackPanel Grid.Row="0" Margin="24,17,0,28">
-            <TextBlock x:Uid="Header" Text="application name" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
-            <TextBlock Text="{Binding Title}" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
+            <TextBlock Text="LunchViewer" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
+            <TextBlock Text="{Binding Day}" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
+            <TextBlock Text="{Binding Date}" Style="{ThemeResource SubheaderTextBlockStyle}"/>
         </StackPanel>
 
-        <!--TODO: Content should be placed within the following grid 
-                  to show details for the current item -->
-        <Grid Grid.Row="1" x:Name="ContentRoot">
-
-        </Grid>
+        <StackPanel Grid.Row="1" Margin="24,0,24,0" x:Name="ContentRoot">
+            <TextBlock Text="{Binding Text}" TextWrapping="WrapWholeWords" Style="{ThemeResource BodyTextBlockStyle}"/>
+            <Button Content="Order" Command="{Binding OrderCommand}" Margin="0,24,0,0"/>
+        </StackPanel>
     </Grid>
 </Page>

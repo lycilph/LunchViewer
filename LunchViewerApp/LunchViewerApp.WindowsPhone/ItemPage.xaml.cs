@@ -12,15 +12,15 @@ namespace LunchViewerApp
     /// </summary>
     public sealed partial class ItemPage : Page
     {
-        private readonly NavigationHelper navigationHelper;
+        private readonly NavigationHelper navigation_helper;
 
         public ItemPage()
         {
             InitializeComponent();
 
-            navigationHelper = new NavigationHelper(this);
-            navigationHelper.LoadState += this.NavigationHelper_LoadState;
-            navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            navigation_helper = new NavigationHelper(this);
+            navigation_helper.LoadState += NavigationHelper_LoadState;
+            navigation_helper.SaveState += NavigationHelper_SaveState;
         } 
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace LunchViewerApp
         /// </summary>
         public NavigationHelper NavigationHelper
         {
-            get { return navigationHelper; }
+            get { return navigation_helper; }
         }
 
         /// <summary>
@@ -42,11 +42,9 @@ namespace LunchViewerApp
         /// <see cref="Frame.Navigate(Type, object)"/> when this page was initially requested and
         /// a dictionary of state preserved by this page during an earlier
         /// session.  The state will be null the first time a page is visited.</param>
-        private /*async*/ void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            // TODO: Create an appropriate data model for your problem domain to replace the sample data
-            //var item = await SampleDataSource.GetItemAsync((string)e.NavigationParameter);
-            //this.DefaultViewModel["Item"] = item;
+            DataContext = e.NavigationParameter as ItemViewModel;
         }
 
         /// <summary>
@@ -78,12 +76,12 @@ namespace LunchViewerApp
         /// <param name="e">Event data that describes how this page was reached.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            this.navigationHelper.OnNavigatedTo(e);
+            navigation_helper.OnNavigatedTo(e);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            this.navigationHelper.OnNavigatedFrom(e);
+            navigation_helper.OnNavigatedFrom(e);
         }
 
         #endregion

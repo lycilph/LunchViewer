@@ -29,13 +29,13 @@ namespace LunchViewerApp
     {
         // This MobileServiceClient has been configured to communicate with your Mobile Service's url
         // and application key. You're all set to start working with your Mobile Service!
-        //public static MobileServiceClient MobileService = new MobileServiceClient("https://lunchviewerservice.azure-mobile.net/", "fkVMfCuWPoTLEorySMugByrbsZsVxA30");
+        public static MobileServiceClient MobileService = new MobileServiceClient("https://lunchviewerservice.azure-mobile.net/", "fkVMfCuWPoTLEorySMugByrbsZsVxA30");
 
         // This MobileServiceClient has been configured to communicate with your local
         // test project for debugging purposes. Please follow these steps to enable access
         // to the local machine from the Windows Phone Emulator:
         // http://msdn.microsoft.com/en-us/library/windowsphone/develop/jj684580(v=vs.105).aspx
-        public static MobileServiceClient MobileService = new MobileServiceClient("http://10.100.69.110:51031");
+        //public static MobileServiceClient MobileService = new MobileServiceClient("http://192.168.237.128:51031");
 
 #if WINDOWS_PHONE_APP
         private TransitionCollection transitions;
