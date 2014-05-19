@@ -1,4 +1,5 @@
 ﻿using LunchViewerApp.Common;
+using LunchViewerApp.ViewModels;
 using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;

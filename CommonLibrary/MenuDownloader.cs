@@ -1,5 +1,4 @@
-﻿using LunchViewerApp.Models;
-using Microsoft.WindowsAzure.MobileServices;
+﻿using Microsoft.WindowsAzure.MobileServices;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -7,11 +6,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace LunchViewerApp
+namespace CommonLibrary
 {
     public static class MenuDownloader
     {
-        public static async Task Execute()
+        public static async Task Execute(MobileServiceClient mobile_service)
         {
             var week_numbers = new List<int> { WeekUtils.PreviousWeekNumber, WeekUtils.CurrentWeekNumber, WeekUtils.NextWeekNumber };
             var week_number_strings = week_numbers.Select(n => n.ToString());
@@ -28,22 +27,22 @@ namespace LunchViewerApp
             foreach (var item in items_to_download)
             {
                 var week_number = Convert.ToInt32(item);
-                await LoadAsync(week_number);
+                await LoadAsync(mobile_service, week_number);
             }
         }
 
-        private static async Task LoadAsync(int week)
+        private static async Task LoadAsync(MobileServiceClient mobile_service, int week)
         {
             try
             {
-                var menus_table = App.MobileService.GetTable<Menu>();
+                var menus_table = mobile_service.GetTable<Menu>();
                 var menus = await menus_table.Where(m => m.Week == week).ToListAsync();
 
                 if (menus.Any())
                 {
                     var menu = menus.First();
 
-                    var items_table = App.MobileService.GetTable<Item>();
+                    var items_table = mobile_service.GetTable<Item>();
                     var items = await items_table.Where(i => i.ParentId == menu.MenuId).ToListAsync();
 
                     var menu_container = ApplicationData.Current.LocalSettings.CreateContainer("menus", ApplicationDataCreateDisposition.Always); 

@@ -1,12 +1,12 @@
-﻿using GalaSoft.MvvmLight;
-using LunchViewerApp.Models;
+﻿using CommonLibrary;
+using GalaSoft.MvvmLight;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Windows.Storage;
 
-namespace LunchViewerApp
+namespace LunchViewerApp.ViewModels
 {
     public class MenuViewModel : ViewModelBase
     {
@@ -45,7 +45,28 @@ namespace LunchViewerApp
             this.header_format = header_format;
         }
 
-        public void LoadAsync(int week)
+        public ItemViewModel GetToday()
+        {
+            return Get(DateTime.Now.Date);
+        }
+
+        public ItemViewModel GetTomorrow()
+        {
+            return Get(DateTime.Now.Date.AddDays(1));
+        }
+
+        public ItemViewModel Get(DateTime date)
+        {
+            foreach (var item in Items)
+            {
+                if (item.Date == date)
+                    return item;
+            }
+
+            return null;
+        }
+
+        public void Load(int week)
         {
             Header = string.Format(header_format, week);
 
@@ -56,7 +77,7 @@ namespace LunchViewerApp
                 var type = new { Menu = new Menu(), Items = new List<Item>() };
                 var obj = JsonConvert.DeserializeAnonymousType(serialized_menu as string, type);
                 model = obj.Menu;
-                Items = obj.Items.Select(i => new ItemViewModel(i, this)).ToList();
+                Items = obj.Items.Select(i => new ItemViewModel(i)).ToList();
 
                 RaisePropertyChanged("HasItems");
                 RaisePropertyChanged("Week");

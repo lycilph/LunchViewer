@@ -1,22 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+﻿using LunchViewerApp.Common;
+using Microsoft.WindowsAzure.MobileServices;
+using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
-using LunchViewerApp.Common;
-using Microsoft.WindowsAzure.MobileServices;
 
 // The Universal Hub Application project template is documented at http://go.microsoft.com/fwlink/?LinkID=391955
 
@@ -47,8 +37,8 @@ namespace LunchViewerApp
         /// </summary>
         public App()
         {
-            this.InitializeComponent();
-            this.Suspending += this.OnSuspending;
+            InitializeComponent();
+            Suspending += OnSuspending;
         }
 
         /// <summary>
@@ -68,8 +58,7 @@ namespace LunchViewerApp
 
             Frame rootFrame = Window.Current.Content as Frame;
 
-            // Do not repeat app initialization when the Window already has content,
-            // just ensure that the window is active
+            // Do not repeat app initialization when the Window already has content, just ensure that the window is active
             if (rootFrame == null)
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
@@ -78,8 +67,7 @@ namespace LunchViewerApp
                 //Associate the frame with a SuspensionManager key                                
                 SuspensionManager.RegisterFrame(rootFrame, "AppFrame");
 
-                // TODO: change this value to a cache size that is appropriate for your application
-                rootFrame.CacheSize = 1;
+                rootFrame.CacheSize = 2;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace LunchViewerApp.Models
+namespace CommonLibrary
 {
-    public class Item
+    public sealed class Item
     {
         public string Id { get; set; }
         public Guid ParentId { get; set; }

@@ -1,14 +1,12 @@
 ﻿using LunchViewerApp.Common;
+using LunchViewerApp.ViewModels;
 using Microsoft.WindowsAzure.MobileServices;
 using System;
-using System.Linq;
-using System.Globalization;
 using System.Windows.Input;
 using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.Resources;
 using Windows.Graphics.Display;
 using Windows.Networking.PushNotifications;
-using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -19,30 +17,23 @@ namespace LunchViewerApp
 {
     public sealed partial class HubPage : Page
     {
+        private readonly MainViewModel view_model;
         private readonly NavigationHelper navigation_helper;
-        private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
-        
+        private readonly ResourceLoader resource_loader = ResourceLoader.GetForCurrentView("Resources");
+
         public NavigationHelper NavigationHelper
         {
             get { return navigation_helper; }
         }
-
-        public MenuViewModel PreviousWeekMenu { get; set; }
-        public MenuViewModel CurrentWeekMenu { get; set; }
-        public MenuViewModel NextWeekMenu { get; set; }
 
         public ICommand UpdateMenusCommand { get; set; }
 
         public HubPage()
         {
             InitializeComponent();
-            DataContext = this;
 
-            PreviousWeekMenu = new MenuViewModel("Previous (Week {0})");
-            CurrentWeekMenu = new MenuViewModel("Current (Week {0})");
-            NextWeekMenu = new MenuViewModel("Next (Week {0})");
-
-            UpdateMenusCommand = new RelayCommand(UpdateMenus);
+            view_model = new MainViewModel();
+            DataContext = view_model;
 
             //RegisterBackgroundTask();
 
@@ -55,26 +46,7 @@ namespace LunchViewerApp
             navigation_helper.LoadState += this.NavigationHelper_LoadState;
             navigation_helper.SaveState += this.NavigationHelper_SaveState;
         }
-
-        private async void UpdateMenus()
-        {
-            await MenuDownloader.Execute();
-            LoadMenus();
-        }
-
-        private void LoadMenus()
-        {
-            if (PreviousWeekMenu.Week != WeekUtils.PreviousWeekNumber)
-                PreviousWeekMenu.LoadAsync(WeekUtils.PreviousWeekNumber);
-            if (CurrentWeekMenu.Week != WeekUtils.CurrentWeekNumber)
-                CurrentWeekMenu.LoadAsync(WeekUtils.CurrentWeekNumber);
-            if (NextWeekMenu.Week != WeekUtils.NextWeekNumber)
-                NextWeekMenu.LoadAsync(WeekUtils.NextWeekNumber);
-
-            if (CurrentWeekMenu.Items.Any())
-                CurrentWeekMenu.Items.First().IsToday = true;
-        }
-
+        
         private async void RegisterBackgroundTask()
         {
             var background_status = await BackgroundExecutionManager.RequestAccessAsync();
@@ -114,7 +86,7 @@ namespace LunchViewerApp
         /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            LoadMenus();
+            view_model.LoadState();
         }
 
         /// <summary>
@@ -137,9 +109,9 @@ namespace LunchViewerApp
         /// <param name="e">Defaults about the click event.</param>
         private void ItemClick(object sender, ItemClickEventArgs e)
         {
-            var item = e.ClickedItem as ItemViewModel;
-            if (!Frame.Navigate(typeof(ItemPage), item))
-                throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
+            //var item = e.ClickedItem as ItemViewModel;
+            //if (!Frame.Navigate(typeof(ItemPage), item))
+            //    throw new Exception(resource_loader.GetString("NavigationFailedExceptionMessage"));
         }
 
         private void HomeClick(object sender, RoutedEventArgs e)

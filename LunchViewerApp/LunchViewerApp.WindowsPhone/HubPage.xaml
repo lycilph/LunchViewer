@@ -21,10 +21,12 @@
             
             <common:BooleanToVisibilityConverter x:Key="boolean_to_visibility"/>
             <common:BooleanToVisibilityConverter x:Key="boolean_to_invisibility" TrueValue="Collapsed" FalseValue="Visible"/>
+            <common:DateFormatConverter x:Key="date_converter" Format="dd MMM yyyy"/>
+            <common:DateFormatConverter x:Key="day_converter" Format="ddd"/>
             <common:AccentBrushConverter x:Key="accent_converter"/>
 
             <DataTemplate x:Key="StandardDoubleLineItemTemplate">
-                <Border BorderThickness="5,0,0,0" BorderBrush="{Binding IsToday, Converter={StaticResource accent_converter}}">
+                <Border BorderThickness="5,0,0,0" BorderBrush="{Binding IsNext, Converter={StaticResource accent_converter}}">
                     <Grid Margin="12,0,0,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -36,98 +38,91 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.ColumnSpan="2" Text="{Binding Date}" Style="{ThemeResource ListViewItemTextBlockStyle}" Margin="0,0,0,6" HorizontalAlignment="Stretch"/>
+                        <TextBlock Grid.ColumnSpan="2"
+                                   Text="{Binding Date, Converter={StaticResource date_converter}}"
+                                   Style="{ThemeResource ListViewItemTextBlockStyle}"
+                                   Margin="0,0,0,6"
+                                   HorizontalAlignment="Stretch"/>
                         
                         <Border Grid.Row="1" Grid.Column="0" BorderBrush="{ThemeResource PhoneAccentBrush}" Background="{ThemeResource PhoneChromeBrush}" BorderThickness="1" Width="50" Height="40" CornerRadius="5">
-                            <TextBlock Text="{Binding Day}" Style="{ThemeResource ListViewItemContentTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding Date, Converter={StaticResource day_converter}}"
+                                       Style="{ThemeResource ListViewItemContentTextBlockStyle}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"/>
                         </Border>
                         <TextBlock Grid.Row="1" Grid.Column="1" Margin="12,0,0,0" Text="{Binding Text}" Style="{ThemeResource ListViewItemContentTextBlockStyle}" TextWrapping="WrapWholeWords"/>
                     </Grid>
                 </Border>
             </DataTemplate>
+
+            <DataTemplate x:Key="MenuHubSectionTemplate">
+                <Grid>
+                    <ListView HorizontalContentAlignment="Stretch"
+                              ItemsSource="{Binding Items}"
+                              ItemTemplate="{StaticResource StandardDoubleLineItemTemplate}"
+                              SelectionMode="None"
+                              IsItemClickEnabled="True"
+                              ItemClick="ItemClick"
+                              Visibility="{Binding HasItems, Converter={StaticResource boolean_to_visibility}}"
+                              ContinuumNavigationTransitionInfo.ExitElementContainer="True">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                    <TextBlock Text="None"
+                               Style="{ThemeResource HeaderTextBlockStyle}"
+                               Margin="0,50"
+                               HorizontalAlignment="Center"
+                               Visibility="{Binding HasItems, Converter={StaticResource boolean_to_invisibility}}"/>
+                </Grid>
+            </DataTemplate>
         </ResourceDictionary>
     </Page.Resources>
 
-    <Grid x:Name="LayoutRoot">
-        <Hub x:Name="hub_control" Header="LunchViewer" Background="{ThemeResource HubBackgroundImageBrush}">
-            <HubSection Header="{Binding Header}" DataContext="{Binding CurrentWeekMenu}">
-                <DataTemplate>
+    <Grid x:Name="LayoutRoot" >
+        <Hub x:Name="hub_control" Background="{ThemeResource HubBackgroundImageBrush}">
+            <Hub.Header>
+                <StackPanel>
+                    <TextBlock Text="LunchViewer"/>
                     <Grid>
-                        <ListView
-                            HorizontalContentAlignment="Stretch"
-                            ItemsSource="{Binding Items}"
-                            ItemTemplate="{StaticResource StandardDoubleLineItemTemplate}"
-                            SelectionMode="None"
-                            IsItemClickEnabled="True"
-                            ItemClick="ItemClick"
-                            Visibility="{Binding HasItems, Converter={StaticResource boolean_to_visibility}}"
-                            ContinuumNavigationTransitionInfo.ExitElementContainer="True">
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                        </ListView>
-                        <TextBlock Text="None"
-                                   Style="{ThemeResource HeaderTextBlockStyle}"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"
-                                   Visibility="{Binding HasItems, Converter={StaticResource boolean_to_invisibility}}"/>
+                        <Rectangle Height="10"/>
+                        <ProgressBar Height="10" IsIndeterminate="True" Background="Transparent" Visibility="{Binding IsBusy, Converter={StaticResource boolean_to_visibility}}"/>
                     </Grid>
+                </StackPanel>
+            </Hub.Header>
+            
+            <HubSection Header="{Binding Header}" DataContext="{Binding NextItem}">
+                <DataTemplate>
+                    <StackPanel VerticalAlignment="Bottom" Margin="0,50">
+                        <TextBlock Text="{Binding Date, Converter={StaticResource date_converter}}" Style="{ThemeResource HeaderTextBlockStyle}"/>
+                        <TextBlock Text="{Binding Text}" Style="{ThemeResource SubheaderTextBlockStyle}"/>
+                    </StackPanel>
                 </DataTemplate>
             </HubSection>
+            
+            <HubSection Header="{Binding Header}"
+                        DataContext="{Binding CurrentWeekMenu}"
+                        ContentTemplate="{StaticResource MenuHubSectionTemplate}"/>
 
-            <HubSection Header="{Binding Header}" DataContext="{Binding NextWeekMenu}">
-                <DataTemplate>
-                    <Grid>
-                        <ListView
-                            ItemsSource="{Binding Items}"
-                            ItemTemplate="{StaticResource StandardDoubleLineItemTemplate}"
-                            SelectionMode="None"
-                            IsItemClickEnabled="True"
-                            ItemClick="ItemClick"
-                            Visibility="{Binding HasItems, Converter={StaticResource boolean_to_visibility}}"
-                            ContinuumNavigationTransitionInfo.ExitElementContainer="True">
-                        </ListView>
-                        <TextBlock Text="None"
-                                   Style="{ThemeResource HeaderTextBlockStyle}"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"
-                                   Visibility="{Binding HasItems, Converter={StaticResource boolean_to_invisibility}}"/>
-                    </Grid>
-                </DataTemplate>
-            </HubSection>
+            <HubSection Header="{Binding Header}"
+                        DataContext="{Binding NextWeekMenu}"
+                        ContentTemplate="{StaticResource MenuHubSectionTemplate}"/>
 
-            <HubSection Header="{Binding Header}" DataContext="{Binding PreviousWeekMenu}">
-                <DataTemplate>
-                    <Grid>
-                        <ListView
-                            ItemsSource="{Binding Items}"
-                            ItemTemplate="{StaticResource StandardDoubleLineItemTemplate}"
-                            SelectionMode="None"
-                            IsItemClickEnabled="True"
-                            ItemClick="ItemClick"
-                            Visibility="{Binding HasItems, Converter={StaticResource boolean_to_visibility}}"
-                            ContinuumNavigationTransitionInfo.ExitElementContainer="True">
-                        </ListView>
-                        <TextBlock Text="None"
-                                   Style="{ThemeResource HeaderTextBlockStyle}"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"
-                                   Visibility="{Binding HasItems, Converter={StaticResource boolean_to_invisibility}}"/>
-                    </Grid>
-                </DataTemplate>
-            </HubSection>
+            <HubSection Header="{Binding Header}"
+                        DataContext="{Binding PreviousWeekMenu}"
+                        ContentTemplate="{StaticResource MenuHubSectionTemplate}"/>
         </Hub>
     </Grid>
     
     <Page.BottomAppBar>
-        <CommandBar ClosedDisplayMode="Compact">
-            <AppBarButton Icon="Home" Click="HomeClick"/>
-            <AppBarButton Icon="Globe"/>
+        <CommandBar ClosedDisplayMode="Minimal">
+            <AppBarButton Icon="Home" Label="Home" Click="HomeClick"/>
+            <AppBarButton Icon="Globe" Label="Web" Command="{Binding WebCommand}"/>
             <CommandBar.SecondaryCommands>
-                <AppBarButton Label="Update now" Command="{Binding UpdateMenusCommand}"/>
-                <AppBarButton Label="Settings"/>
+                <AppBarButton Icon="Refresh" Label="Update now" Command="{Binding UpdateNowCommand}"/>
+                <AppBarButton Icon="Setting" Label="Show log" Command="{Binding ShowLogCommand}"/>
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>

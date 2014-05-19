@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace LunchViewerApp.Models
+namespace CommonLibrary
 {
-    public class Menu
+    public sealed class Menu
     {
         public string Id { get; set; }
         public Guid MenuId { get; set; }
