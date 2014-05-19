@@ -104,7 +104,6 @@ namespace EmailProcessor
                 Trace.TraceInformation("Waiting until {0}", next_execution_time.ToShortTimeString());
                 while (current_time < next_execution_time)
                 {
-
                     Thread.Sleep(1000);
                     current_time = DateTime.Now;
                 }

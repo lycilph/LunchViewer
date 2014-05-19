@@ -54,10 +54,9 @@ namespace EmailProcessor
                         menu.Add(date, text, link);
                     }
 
-                    return true;
+                    // Success if we found any items and a valid week number
+                    return week > -1 && menu.ItemEntities.Count() > 0;
                 }
-
-                Trace.TraceInformation(" --- Wrong content type");
             }
 
             return false;
