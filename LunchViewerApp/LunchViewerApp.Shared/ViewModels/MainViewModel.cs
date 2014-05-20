@@ -109,7 +109,8 @@ namespace LunchViewerApp.ViewModels
 
             // Update the next item
             NextItem.Update(next_item);
-            next_item.IsNext = true;
+            if (next_item != null)
+                next_item.IsNext = true;
         }
 
         public void LoadState()

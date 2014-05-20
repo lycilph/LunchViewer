@@ -26,13 +26,18 @@ namespace LunchViewerApp.ViewModels
             set { Set(() => Text, ref _Text, value); }
         }
 
+        private ItemViewModel _ItemViewModel;
+        public ItemViewModel ItemViewModel
+        {
+            get { return _ItemViewModel; }
+            set { Set(() => ItemViewModel, ref _ItemViewModel, value); }
+        }
+        
         public void Update(ItemViewModel item)
         {
             if (item == null)
             {
                 Header = "Next lunch";
-                Date = DateTime.Now;
-                Text = "None";
             }
             else if (item.IsToday())
                 Header = "Today";
@@ -41,10 +46,16 @@ namespace LunchViewerApp.ViewModels
             else
                 Header = item.Date.ToString("dddd");
 
+            ItemViewModel = item;
             if (item != null)
             {
                 Date = item.Date;
                 Text = item.Text;
+            }
+            else
+            {
+                Date = DateTime.Now;
+                Text = "None";
             }
         }
     }

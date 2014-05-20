@@ -2,11 +2,14 @@
 using LunchViewerApp.ViewModels;
 using Microsoft.WindowsAzure.MobileServices;
 using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.Resources;
 using Windows.Graphics.Display;
 using Windows.Networking.PushNotifications;
+using Windows.Storage;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -35,7 +38,7 @@ namespace LunchViewerApp
             view_model = new MainViewModel();
             DataContext = view_model;
 
-            //RegisterBackgroundTask();
+            RegisterBackgroundTask();
 
             // Hub is only supported in Portrait orientation
             DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
@@ -43,34 +46,66 @@ namespace LunchViewerApp
             NavigationCacheMode = NavigationCacheMode.Required;
 
             navigation_helper = new NavigationHelper(this);
-            navigation_helper.LoadState += this.NavigationHelper_LoadState;
-            navigation_helper.SaveState += this.NavigationHelper_SaveState;
+            navigation_helper.LoadState += NavigationHelper_LoadState;
+            navigation_helper.SaveState += NavigationHelper_SaveState;
         }
         
         private async void RegisterBackgroundTask()
         {
             var background_status = await BackgroundExecutionManager.RequestAccessAsync();
 
-            var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
-            await App.MobileService.GetPush().RegisterNativeAsync(channel.Uri);
+            await UpdatePushNotificationChannel();
 
-            var task_name = "Raw notifications background task";
+            // See if the task is already registered
+            var task_name = "NewDataBackgroundTask";
             var tasks = BackgroundTaskRegistration.AllTasks;
             foreach (var task in tasks)
             {
                 if (task.Value.Name == task_name)
                 {
-                    task.Value.Unregister(true);
+                    // DEBUG
+                    task.Value.Unregister(false);
                     break;
+
+                    //return;
                 }
             }
 
+            // If the background task is not already registered, do it now
             var builder = new BackgroundTaskBuilder();
             builder.Name = task_name;
             builder.TaskEntryPoint = "BackgroundTasks.NewDataBackgroundTask";
-            var trigger = new Windows.ApplicationModel.Background.PushNotificationTrigger();
+            var trigger = new PushNotificationTrigger();
             builder.SetTrigger(trigger);
             BackgroundTaskRegistration task_registration = builder.Register();
+        }
+
+        private static async Task UpdatePushNotificationChannel()
+        {
+            var update_channel = true;
+
+            var new_push_channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+            var current_push_channel = ApplicationData.Current.LocalSettings.Values["channel_uri"] as string;
+            if (current_push_channel != null && current_push_channel == new_push_channel.Uri)
+                update_channel = false;
+
+            if (update_channel)
+            {
+                ApplicationData.Current.LocalSettings.Values["channel_uri"] = new_push_channel.Uri;
+
+                MessageDialog dialog = null;
+                try
+                {
+                    await App.MobileService.GetPush().RegisterNativeAsync(new_push_channel.Uri);
+                }
+                catch (Exception)
+                {
+                    dialog = new MessageDialog("Couldn't register the app for push notifications", "Error");
+                }
+
+                if (dialog != null)
+                    await dialog.ShowAsync();
+            }
         }
 
         /// <summary>
@@ -109,9 +144,21 @@ namespace LunchViewerApp
         /// <param name="e">Defaults about the click event.</param>
         private void ItemClick(object sender, ItemClickEventArgs e)
         {
-            //var item = e.ClickedItem as ItemViewModel;
-            //if (!Frame.Navigate(typeof(ItemPage), item))
-            //    throw new Exception(resource_loader.GetString("NavigationFailedExceptionMessage"));
+            ShowItem(e.ClickedItem as ItemViewModel);
+        }
+
+        private void NextItemClick(object sender, RoutedEventArgs e)
+        {
+            ShowItem(view_model.NextItem.ItemViewModel);
+        }
+
+        private void ShowItem(ItemViewModel item)
+        {
+            if (item == null)
+                return;
+
+            if (!Frame.Navigate(typeof(ItemPage), item))
+                throw new Exception(resource_loader.GetString("NavigationFailedExceptionMessage"));
         }
 
         private void HomeClick(object sender, RoutedEventArgs e)

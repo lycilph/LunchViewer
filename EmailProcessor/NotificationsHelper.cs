@@ -17,12 +17,9 @@ namespace EmailProcessor
             var hub = NotificationHubClient.CreateClientFromConnectionString(hub_connection_string, hub_name, true);
 
             var registrations = await hub.GetAllRegistrationsAsync(Int32.MaxValue);
-            Trace.TraceInformation("Found {0} registrations", registrations.Count());
-
             if (registrations.Any())
             {
-                var message = string.Format("Processed new menu ({0}, {1})", menu.MenuEntity.Year, menu.MenuEntity.Week);
-                var notification = new WindowsNotification(message);
+                var notification = new WindowsNotification("NewData");
                 notification.Headers.Add("X-WNS-Type", "wns/raw");
 
                 var outcome = await hub.SendNotificationAsync(notification);

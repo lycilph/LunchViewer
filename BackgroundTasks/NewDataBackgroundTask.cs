@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using CommonLibrary;
+using Microsoft.WindowsAzure.MobileServices;
 using Windows.ApplicationModel.Background;
 using Windows.Networking.PushNotifications;
 using Windows.Storage;
@@ -7,19 +8,17 @@ namespace BackgroundTasks
 {
     public sealed class NewDataBackgroundTask : IBackgroundTask
     {
-        public void Run(IBackgroundTaskInstance taskInstance)
+        private static MobileServiceClient MobileService = new MobileServiceClient("https://lunchviewerservice.azure-mobile.net/", "fkVMfCuWPoTLEorySMugByrbsZsVxA30");
+
+        public async void Run(IBackgroundTaskInstance taskInstance)
         {
-            // Get the background task details
-            ApplicationDataContainer settings = ApplicationData.Current.LocalSettings;
-            string taskName = taskInstance.Task.Name;
+            BackgroundTaskDeferral deferral = taskInstance.GetDeferral();
 
-            Debug.WriteLine("Background " + taskName + " starting...");
-
-            // Store the content received from the notification so it can be retrieved from the UI.
             RawNotification notification = (RawNotification)taskInstance.TriggerDetails;
-            settings.Values[taskName] = notification.Content;
+            if (notification.Content == "NewData")
+                await MenuDownloader.Execute(MobileService);
 
-            Debug.WriteLine("Background " + taskName + " completed!");
+            deferral.Complete();
         }
     }
 }

@@ -24,29 +24,20 @@ namespace LunchViewerApp
     public sealed partial class HubPage : Page
     {
         private NavigationHelper navigationHelper;
-        private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
         /// <summary>
         /// Gets the NavigationHelper used to aid in navigation and process lifetime management.
         /// </summary>
         public NavigationHelper NavigationHelper
         {
-            get { return this.navigationHelper; }
-        }
-
-        /// <summary>
-        /// Gets the DefaultViewModel. This can be changed to a strongly typed view model.
-        /// </summary>
-        public ObservableDictionary DefaultViewModel
-        {
-            get { return this.defaultViewModel; }
+            get { return navigationHelper; }
         }
 
         public HubPage()
         {
-            this.InitializeComponent();
-            this.navigationHelper = new NavigationHelper(this);
-            this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
+            InitializeComponent();
+            navigationHelper = new NavigationHelper(this);
+            navigationHelper.LoadState += NavigationHelper_LoadState;
         }
 
         /// <summary>
@@ -64,7 +55,7 @@ namespace LunchViewerApp
         {
             // TODO: Create an appropriate data model for your problem domain to replace the sample data
             //var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-4");
-            //this.DefaultViewModel["Section3Items"] = sampleDataGroup;
+            //DefaultViewModel["Section3Items"] = sampleDataGroup;
         }
 
         /// <summary>
@@ -76,7 +67,7 @@ namespace LunchViewerApp
         {
             //HubSection section = e.Section;
             //var group = section.DataContext;
-            //this.Frame.Navigate(typeof(SectionPage), ((SampleDataGroup)group).UniqueId);
+            //Frame.Navigate(typeof(SectionPage), ((SampleDataGroup)group).UniqueId);
         }
 
         /// <summary>
@@ -90,8 +81,9 @@ namespace LunchViewerApp
             // Navigate to the appropriate destination page, configuring the new page
             // by passing required information as a navigation parameter
             //var itemId = ((SampleDataItem)e.ClickedItem).UniqueId;
-            //this.Frame.Navigate(typeof(ItemPage), itemId);
+            //Frame.Navigate(typeof(ItemPage), itemId);
         }
+
         #region NavigationHelper registration
 
         /// <summary>
@@ -105,12 +97,12 @@ namespace LunchViewerApp
         /// </summary>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            this.navigationHelper.OnNavigatedTo(e);
+            navigationHelper.OnNavigatedTo(e);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            this.navigationHelper.OnNavigatedFrom(e);
+            navigationHelper.OnNavigatedFrom(e);
         }
 
         #endregion

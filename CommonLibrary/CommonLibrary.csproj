@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Item.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="MenuDownloader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

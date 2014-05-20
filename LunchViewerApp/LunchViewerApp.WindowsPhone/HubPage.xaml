@@ -97,7 +97,9 @@
                 <DataTemplate>
                     <StackPanel VerticalAlignment="Bottom" Margin="0,50">
                         <TextBlock Text="{Binding Date, Converter={StaticResource date_converter}}" Style="{ThemeResource HeaderTextBlockStyle}"/>
-                        <TextBlock Text="{Binding Text}" Style="{ThemeResource SubheaderTextBlockStyle}"/>
+                        <Button BorderBrush="Transparent" Click="NextItemClick">
+                            <TextBlock Text="{Binding Text}" Style="{ThemeResource SubheaderTextBlockStyle}"/>
+                        </Button>
                     </StackPanel>
                 </DataTemplate>
             </HubSection>

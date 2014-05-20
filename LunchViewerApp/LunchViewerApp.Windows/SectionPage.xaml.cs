@@ -24,14 +24,13 @@ namespace LunchViewerApp
     /// </summary>
     public sealed partial class SectionPage : Page
     {
-        private NavigationHelper navigationHelper;
-        private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        private NavigationHelper navigation_helper;
 
         public SectionPage()
         {
-            this.InitializeComponent();
-            this.navigationHelper = new NavigationHelper(this);
-            this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
+            InitializeComponent();
+            navigation_helper = new NavigationHelper(this);
+            navigation_helper.LoadState += this.NavigationHelper_LoadState;
         }
 
         /// <summary>
@@ -39,15 +38,7 @@ namespace LunchViewerApp
         /// </summary>
         public NavigationHelper NavigationHelper
         {
-            get { return this.navigationHelper; }
-        }
-
-        /// <summary>
-        /// Gets the DefaultViewModel. This can be changed to a strongly typed view model.
-        /// </summary>
-        public ObservableDictionary DefaultViewModel
-        {
-            get { return this.defaultViewModel; }
+            get { return navigation_helper; }
         }
 
         /// <summary>
@@ -95,12 +86,12 @@ namespace LunchViewerApp
         /// </summary>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            this.navigationHelper.OnNavigatedTo(e);
+            navigation_helper.OnNavigatedTo(e);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            this.navigationHelper.OnNavigatedFrom(e);
+            navigation_helper.OnNavigatedFrom(e);
         }
 
         #endregion

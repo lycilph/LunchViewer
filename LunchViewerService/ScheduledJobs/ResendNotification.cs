@@ -27,28 +27,21 @@ namespace LunchViewerService.ScheduledJobs
             var filter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, DateTime.Now.Year.ToString(CultureInfo.InvariantCulture));
             var query = new TableQuery<MenuEntity>().Where(filter);
             var result = menu_table.ExecuteQuery(query);
-            var count = result.Count() + 1;
-
-            Services.Log.Info(string.Format("Found {0} menus", count));
+            var count = result.Count();
 
             var hub_connection_name = Services.Settings["MS_NotificationHubName"];
             var hub_connection_string = Services.Settings["MS_NotificationHubConnectionString"];
             var hub = NotificationHubClient.CreateClientFromConnectionString(hub_connection_string, hub_connection_name, true);
             
             var registrations = await hub.GetAllRegistrationsAsync(Int32.MaxValue);
-            Services.Log.Info(string.Format("Found {0} registrations", registrations.Count()));
 
-            if (registrations.Any())
+            if (registrations.Any() && count > 0)
             {
-                var message = string.Format("Processed new menu ({0}, {1})", 2014, 20);
-                var notification = new WindowsNotification(message);
+                var notification = new WindowsNotification("NewData");
                 notification.Headers.Add("X-WNS-Type", "wns/raw");
 
                 var outcome = await hub.SendNotificationAsync(notification);
-                Services.Log.Info(string.Format("Notification outcome {0}", outcome.State));
             }
-
-            //return Task.FromResult(true);
         }
     }
 }

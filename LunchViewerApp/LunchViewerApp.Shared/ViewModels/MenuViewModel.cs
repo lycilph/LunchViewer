@@ -47,19 +47,19 @@ namespace LunchViewerApp.ViewModels
 
         public ItemViewModel GetToday()
         {
-            return Get(DateTime.Now.Date);
+            return Get(DateTime.Now);
         }
 
         public ItemViewModel GetTomorrow()
         {
-            return Get(DateTime.Now.Date.AddDays(1));
+            return Get(DateTime.Now.AddDays(1));
         }
 
         public ItemViewModel Get(DateTime date)
         {
             foreach (var item in Items)
             {
-                if (item.Date == date)
+                if (item.Date.Date == date.Date)
                     return item;
             }
 

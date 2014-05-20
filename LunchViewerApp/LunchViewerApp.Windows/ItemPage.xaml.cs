@@ -26,7 +26,6 @@ namespace LunchViewerApp
     public sealed partial class ItemPage : Page
     {
         private NavigationHelper navigationHelper;
-        private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
         public ItemPage()
         {
@@ -41,14 +40,6 @@ namespace LunchViewerApp
         public NavigationHelper NavigationHelper
         {
             get { return this.navigationHelper; }
-        }
-
-        /// <summary>
-        /// Gets the DefaultViewModel. This can be changed to a strongly typed view model.
-        /// </summary>
-        public ObservableDictionary DefaultViewModel
-        {
-            get { return this.defaultViewModel; }
         }
 
         /// <summary>
