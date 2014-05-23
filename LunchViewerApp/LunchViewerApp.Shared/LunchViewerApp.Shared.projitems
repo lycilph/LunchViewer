@@ -18,7 +18,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Common\AccentBrushConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\BooleanToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\DateFormatConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Common\EnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ItemViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MenuViewModel.cs" />

@@ -9,6 +9,7 @@ using Windows.ApplicationModel.Resources;
 using Windows.Graphics.Display;
 using Windows.Networking.PushNotifications;
 using Windows.Storage;
+using Windows.UI.Notifications;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -38,7 +39,12 @@ namespace LunchViewerApp
             view_model = new MainViewModel();
             DataContext = view_model;
 
-            RegisterBackgroundTask();
+            InitializeBackgroundTasks();
+            UpdatePushNotificationChannel();
+            RegisterNewDataBackgroundTask();
+            RegisterUpdateTileBackgroundTask();
+            RegisterUpdatePushChannelBackgroundTask();
+            InitializeNotifications();
 
             // Hub is only supported in Portrait orientation
             DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
@@ -49,26 +55,66 @@ namespace LunchViewerApp
             navigation_helper.LoadState += NavigationHelper_LoadState;
             navigation_helper.SaveState += NavigationHelper_SaveState;
         }
-        
-        private async void RegisterBackgroundTask()
+
+        private async void InitializeBackgroundTasks()
         {
-            var background_status = await BackgroundExecutionManager.RequestAccessAsync();
+            await BackgroundExecutionManager.RequestAccessAsync();
+        }
 
-            await UpdatePushNotificationChannel();
+        private void InitializeNotifications()
+        {
+            TileUpdateManager.CreateTileUpdaterForApplication().EnableNotificationQueueForWide310x150(true);
+        }
 
+        private void RegisterUpdatePushChannelBackgroundTask()
+        {
+            // See if the task is already registered
+            var task_name = "UpdatePushChannelBackgroundTask";
+            var tasks = BackgroundTaskRegistration.AllTasks;
+            foreach (var task in tasks)
+            {
+                if (task.Value.Name == task_name)
+                    return;
+            }
+
+            // If the background task is not already registered, do it now
+            var builder = new BackgroundTaskBuilder();
+            builder.Name = task_name;
+            builder.TaskEntryPoint = "BackgroundTasks.UpdatePushChannelBackgroundTask";
+            var trigger = new MaintenanceTrigger(15, true);
+            builder.SetTrigger(trigger);
+            BackgroundTaskRegistration task_registration = builder.Register();
+        }
+
+        private void RegisterUpdateTileBackgroundTask()
+        {
+            // See if the task is already registered
+            var task_name = "UpdateTileBackgroundTask";
+            var tasks = BackgroundTaskRegistration.AllTasks;
+            foreach (var task in tasks)
+            {
+                if (task.Value.Name == task_name)
+                    return;
+            }
+
+            // If the background task is not already registered, do it now
+            var builder = new BackgroundTaskBuilder();
+            builder.Name = task_name;
+            builder.TaskEntryPoint = "BackgroundTasks.UpdateTileBackgroundTask";
+            var trigger = new TimeTrigger(60, false);
+            builder.SetTrigger(trigger);
+            BackgroundTaskRegistration task_registration = builder.Register();
+        }
+
+        private void RegisterNewDataBackgroundTask()
+        {
             // See if the task is already registered
             var task_name = "NewDataBackgroundTask";
             var tasks = BackgroundTaskRegistration.AllTasks;
             foreach (var task in tasks)
             {
                 if (task.Value.Name == task_name)
-                {
-                    // DEBUG
-                    task.Value.Unregister(false);
-                    break;
-
-                    //return;
-                }
+                    return;
             }
 
             // If the background task is not already registered, do it now
@@ -80,31 +126,43 @@ namespace LunchViewerApp
             BackgroundTaskRegistration task_registration = builder.Register();
         }
 
-        private static async Task UpdatePushNotificationChannel()
+        private static async void UpdatePushNotificationChannel()
         {
-            var update_channel = true;
+            await UpdatePushNotificationChannelAsync();
+        }
 
-            var new_push_channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
-            var current_push_channel = ApplicationData.Current.LocalSettings.Values["channel_uri"] as string;
-            if (current_push_channel != null && current_push_channel == new_push_channel.Uri)
-                update_channel = false;
-
-            if (update_channel)
+        private static async Task UpdatePushNotificationChannelAsync()
+        {
+            try
             {
-                ApplicationData.Current.LocalSettings.Values["channel_uri"] = new_push_channel.Uri;
+                var update_channel = true;
 
-                MessageDialog dialog = null;
-                try
-                {
-                    await App.MobileService.GetPush().RegisterNativeAsync(new_push_channel.Uri);
-                }
-                catch (Exception)
-                {
-                    dialog = new MessageDialog("Couldn't register the app for push notifications", "Error");
-                }
+                var new_push_channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+                var current_push_channel = ApplicationData.Current.LocalSettings.Values["channel_uri"] as string;
+                if (current_push_channel != null && current_push_channel == new_push_channel.Uri)
+                    update_channel = false;
 
-                if (dialog != null)
-                    await dialog.ShowAsync();
+                if (update_channel)
+                {
+                    ApplicationData.Current.LocalSettings.Values["channel_uri"] = new_push_channel.Uri;
+
+                    MessageDialog dialog = null;
+                    try
+                    {
+                        await App.MobileService.GetPush().RegisterNativeAsync(new_push_channel.Uri);
+                    }
+                    catch (Exception)
+                    {
+                        dialog = new MessageDialog("Couldn't register the app for push notifications", "Error");
+                    }
+
+                    if (dialog != null)
+                        await dialog.ShowAsync();
+                }
+            }
+            catch (Exception)
+            {
+                // Log error here
             }
         }
 

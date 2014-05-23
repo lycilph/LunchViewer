@@ -12,7 +12,7 @@
         <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Default">
-                    <ImageBrush x:Key="HubBackgroundImageBrush" ImageSource="Assets/HubBackground.png"/>
+                    <ImageBrush x:Key="HubBackgroundImageBrush" ImageSource="Assets/HubBackground.jpg"/>
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="HighContrast">
                     <ImageBrush x:Key="HubBackgroundImageBrush" ImageSource="{x:Null}"/>
@@ -121,7 +121,6 @@
     <Page.BottomAppBar>
         <CommandBar ClosedDisplayMode="Minimal">
             <AppBarButton Icon="Home" Label="Home" Click="HomeClick"/>
-            <AppBarButton Icon="Globe" Label="Web" Command="{Binding WebCommand}"/>
             <CommandBar.SecondaryCommands>
                 <AppBarButton Icon="Refresh" Label="Update now" Command="{Binding UpdateNowCommand}"/>
                 <AppBarButton Icon="Setting" Label="Show log" Command="{Binding ShowLogCommand}"/>

@@ -4,10 +4,16 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:LunchViewerApp"
     xmlns:data="using:LunchViewerApp.Data"
+    xmlns:common="using:LunchViewerApp.Common"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <common:DateFormatConverter x:Key="date_converter" Format="dd MMM yyyy"/>
+        <common:DateFormatConverter x:Key="day_converter" Format="dddd"/>
+    </Page.Resources>
+    
     <Page.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition>
@@ -33,8 +39,8 @@
         <!-- TitlePanel -->
         <StackPanel Grid.Row="0" Margin="24,17,0,28">
             <TextBlock Text="LunchViewer" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
-            <TextBlock Text="{Binding Day}" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
-            <TextBlock Text="{Binding Date}" Style="{ThemeResource SubheaderTextBlockStyle}"/>
+            <TextBlock Text="{Binding Date, Converter={StaticResource day_converter}}" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
+            <TextBlock Text="{Binding Date, Converter={StaticResource date_converter}}" Style="{ThemeResource SubheaderTextBlockStyle}"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Margin="24,0,24,0" x:Name="ContentRoot">

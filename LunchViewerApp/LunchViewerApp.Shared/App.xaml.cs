@@ -1,4 +1,5 @@
-﻿using LunchViewerApp.Common;
+﻿using CommonLibrary;
+using LunchViewerApp.Common;
 using Microsoft.WindowsAzure.MobileServices;
 using System;
 using Windows.ApplicationModel;
@@ -55,6 +56,8 @@ namespace LunchViewerApp
                 this.DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
+
+            await Logger.AddAsync("Launching app");
 
             Frame rootFrame = Window.Current.Content as Frame;
 

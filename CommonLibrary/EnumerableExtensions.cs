@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LunchViewerApp.Common
+namespace CommonLibrary
 {
     public static class EnumerableExtensions
     {

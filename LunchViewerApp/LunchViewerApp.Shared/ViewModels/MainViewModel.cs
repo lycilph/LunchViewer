@@ -33,7 +33,6 @@ namespace LunchViewerApp.ViewModels
         }
 
         public ICommand HomeCommand { get; set; }
-        public ICommand WebCommand { get; set; }
         public ICommand UpdateNowCommand { get; set; }
         public ICommand ShowLogCommand { get; set; }
 
@@ -46,14 +45,8 @@ namespace LunchViewerApp.ViewModels
 
             NextItem = new NextItemViewModel();
 
-            WebCommand = new RelayCommand(Web);
             UpdateNowCommand = new RelayCommand(UpdateNow);
             ShowLogCommand = new RelayCommand(ShowLog);
-        }
-
-        private void Web()
-        {
-            throw new System.NotImplementedException();
         }
 
         private async void UpdateNow()
@@ -68,7 +61,7 @@ namespace LunchViewerApp.ViewModels
 
         private void ShowLog()
         {
-            throw new NotImplementedException();
+            
         }
 
         private void LoadMenus()
