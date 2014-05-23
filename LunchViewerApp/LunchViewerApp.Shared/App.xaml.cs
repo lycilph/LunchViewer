@@ -18,15 +18,7 @@ namespace LunchViewerApp
     /// </summary>
     public sealed partial class App : Application
     {
-        // This MobileServiceClient has been configured to communicate with your Mobile Service's url
-        // and application key. You're all set to start working with your Mobile Service!
-        public static MobileServiceClient MobileService = new MobileServiceClient("https://lunchviewerservice.azure-mobile.net/", "fkVMfCuWPoTLEorySMugByrbsZsVxA30");
-
-        // This MobileServiceClient has been configured to communicate with your local
-        // test project for debugging purposes. Please follow these steps to enable access
-        // to the local machine from the Windows Phone Emulator:
-        // http://msdn.microsoft.com/en-us/library/windowsphone/develop/jj684580(v=vs.105).aspx
-        //public static MobileServiceClient MobileService = new MobileServiceClient("http://192.168.237.128:51031");
+        public static MobileServiceClient MobileService = MobileServiceUtils.CreateMobileServiceClient();
 
 #if WINDOWS_PHONE_APP
         private TransitionCollection transitions;
@@ -40,6 +32,7 @@ namespace LunchViewerApp
         {
             InitializeComponent();
             Suspending += OnSuspending;
+            Resuming += OnResuming;
         }
 
         /// <summary>
@@ -57,7 +50,7 @@ namespace LunchViewerApp
             }
 #endif
 
-            await Logger.AddAsync("Launching app");
+            await Logger.WriteAsync("Launching app");
 
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -118,6 +111,9 @@ namespace LunchViewerApp
 
             // Ensure the current window is active
             Window.Current.Activate();
+
+            // Move this to the onlaunch and onresume in app.cs
+            await PushNotificationUtils.UpdateChannelAsync(MobileService);
         }
 
 #if WINDOWS_PHONE_APP
@@ -144,6 +140,11 @@ namespace LunchViewerApp
             var deferral = e.SuspendingOperation.GetDeferral();
             await SuspensionManager.SaveAsync();
             deferral.Complete();
+        }
+
+        private async void OnResuming(object sender, object e)
+        {
+            await PushNotificationUtils.UpdateChannelAsync(MobileService);
         }
     }
 }

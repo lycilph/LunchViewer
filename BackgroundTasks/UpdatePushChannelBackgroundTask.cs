@@ -1,16 +1,20 @@
-﻿using Windows.ApplicationModel.Background;
+﻿using CommonLibrary;
+using Windows.ApplicationModel.Background;
 
 namespace BackgroundTasks
 {
     public sealed class UpdatePushChannelBackgroundTask : IBackgroundTask
     {
-        public void Run(IBackgroundTaskInstance taskInstance)
+        public async void Run(IBackgroundTaskInstance taskInstance)
         {
-            //BackgroundTaskDeferral deferral = taskInstance.GetDeferral();
+            BackgroundTaskDeferral deferral = taskInstance.GetDeferral();
 
-            System.Diagnostics.Debug.WriteLine("UpdatePushChannelBackgroundTask");
+            await Logger.WriteAsync("Updating push channel uri");
 
-            //deferral.Complete();
+            var mobile_service = MobileServiceUtils.CreateMobileServiceClient();
+            await PushNotificationUtils.UpdateChannelAsync(mobile_service);
+            
+            deferral.Complete();
         }
     }
 }

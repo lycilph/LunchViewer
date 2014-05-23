@@ -123,7 +123,7 @@
             <AppBarButton Icon="Home" Label="Home" Click="HomeClick"/>
             <CommandBar.SecondaryCommands>
                 <AppBarButton Icon="Refresh" Label="Update now" Command="{Binding UpdateNowCommand}"/>
-                <AppBarButton Icon="Setting" Label="Show log" Command="{Binding ShowLogCommand}"/>
+                <AppBarButton Icon="Setting" Label="Show log" Click="ShowLogClick"/>
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>

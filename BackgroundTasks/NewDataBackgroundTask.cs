@@ -1,9 +1,7 @@
 ﻿using CommonLibrary;
-using Microsoft.WindowsAzure.MobileServices;
 using Windows.ApplicationModel.Background;
 using Windows.Data.Xml.Dom;
 using Windows.Networking.PushNotifications;
-using Windows.Storage;
 using Windows.UI.Notifications;
 
 namespace BackgroundTasks
@@ -14,15 +12,18 @@ namespace BackgroundTasks
         {
             BackgroundTaskDeferral deferral = taskInstance.GetDeferral();
 
+            await Logger.WriteAsync("New data notification received");
+
             RawNotification notification = (RawNotification)taskInstance.TriggerDetails;
             if (notification.Content == "NewData")
             {
-                var MobileService = new MobileServiceClient("https://lunchviewerservice.azure-mobile.net/", "fkVMfCuWPoTLEorySMugByrbsZsVxA30");
-                var data_found = await MenuDownloader.Execute(MobileService);
+                var data_found = await MenuDownloader.Execute(MobileServiceUtils.CreateMobileServiceClient());
 
                 if (data_found)
                 {
-                    // Create content
+                    await Logger.WriteAsync("New data downloaded");
+
+                    // Create toast content
                     var toast_content = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastImageAndText02);
                     XmlNodeList toast_text_elements = toast_content.GetElementsByTagName("text");
                     toast_text_elements[0].AppendChild(toast_content.CreateTextNode("New data"));
@@ -32,6 +33,7 @@ namespace BackgroundTasks
                     // Send your toast notification.
                     ToastNotificationManager.CreateToastNotifier().Show(toast_notification);
 
+                    // Create badge content
                     var badge_content = BadgeUpdateManager.GetTemplateContent(BadgeTemplateType.BadgeGlyph);
                     var badge_attributes = badge_content.GetElementsByTagName("badge");
                     var badge_xml_element = (XmlElement)badge_attributes[0];

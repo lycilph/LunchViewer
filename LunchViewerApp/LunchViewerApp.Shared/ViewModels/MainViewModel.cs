@@ -32,9 +32,7 @@ namespace LunchViewerApp.ViewModels
             set { Set(() => IsBusy, ref _IsBusy, value); }
         }
 
-        public ICommand HomeCommand { get; set; }
         public ICommand UpdateNowCommand { get; set; }
-        public ICommand ShowLogCommand { get; set; }
 
         public MainViewModel()
         {
@@ -46,7 +44,6 @@ namespace LunchViewerApp.ViewModels
             NextItem = new NextItemViewModel();
 
             UpdateNowCommand = new RelayCommand(UpdateNow);
-            ShowLogCommand = new RelayCommand(ShowLog);
         }
 
         private async void UpdateNow()
@@ -57,11 +54,6 @@ namespace LunchViewerApp.ViewModels
             LoadMenus();
 
             IsBusy = false;
-        }
-
-        private void ShowLog()
-        {
-            
         }
 
         private void LoadMenus()
@@ -110,8 +102,8 @@ namespace LunchViewerApp.ViewModels
         {
             LoadMenus();
 
-            var has_no_menus = week_menus.All(m => !m.HasItems);
-            if (has_no_menus)
+            // If no menus were found, try to download
+            if (week_menus.All(m => !m.HasItems))
                 UpdateNow();
         }
     }
