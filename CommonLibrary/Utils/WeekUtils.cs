@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
-namespace CommonLibrary
+namespace CommonLibrary.Utils
 {
     public static class WeekUtils
     {
@@ -18,6 +19,11 @@ namespace CommonLibrary
         public static int NextWeekNumber
         {
             get { return GetNextWeekNumber(); }
+        }
+
+        public static List<int> Weeks
+        {
+            get { return new List<int> { PreviousWeekNumber, CurrentWeekNumber, NextWeekNumber }; }
         }
 
         public static int GetPreviousWeekNumber()

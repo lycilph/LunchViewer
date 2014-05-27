@@ -38,7 +38,7 @@
                 </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Style="{ThemeResource ListViewItemContentTextBlockStyle}"/>
+                        <TextBlock Text="{Binding}" TextWrapping="Wrap" Style="{ThemeResource ListViewItemContentTextBlockStyle}"/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

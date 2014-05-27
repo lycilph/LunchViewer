@@ -1,4 +1,5 @@
 ﻿using CommonLibrary;
+using CommonLibrary.Utils;
 using LunchViewerApp.Common;
 using Microsoft.WindowsAzure.MobileServices;
 using System;
@@ -112,7 +113,6 @@ namespace LunchViewerApp
             // Ensure the current window is active
             Window.Current.Activate();
 
-            // Move this to the onlaunch and onresume in app.cs
             await PushNotificationUtils.UpdateChannelAsync(MobileService);
         }
 

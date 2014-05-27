@@ -1,4 +1,5 @@
 ﻿using CommonLibrary;
+using CommonLibrary.Models;
 using GalaSoft.MvvmLight;
 using Newtonsoft.Json;
 using System;
@@ -6,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Windows.Storage;
 
-namespace LunchViewerApp.ViewModels
+namespace CommonLibrary.Viewmodels
 {
     public class MenuViewModel : ViewModelBase
     {
@@ -45,16 +46,6 @@ namespace LunchViewerApp.ViewModels
             this.header_format = header_format;
         }
 
-        public ItemViewModel GetToday()
-        {
-            return Get(DateTime.Now);
-        }
-
-        public ItemViewModel GetTomorrow()
-        {
-            return Get(DateTime.Now.AddDays(1));
-        }
-
         public ItemViewModel Get(DateTime date)
         {
             foreach (var item in Items)
@@ -66,7 +57,7 @@ namespace LunchViewerApp.ViewModels
             return null;
         }
 
-        public void Load(int week)
+        public void Read(int week)
         {
             Header = string.Format(header_format, week);
 

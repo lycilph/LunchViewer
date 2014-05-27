@@ -1,4 +1,5 @@
 ﻿using CommonLibrary;
+using CommonLibrary.Utils;
 using Windows.ApplicationModel.Background;
 
 namespace BackgroundTasks

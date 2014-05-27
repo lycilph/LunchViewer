@@ -1,4 +1,5 @@
-﻿using Microsoft.WindowsAzure.MobileServices;
+﻿using CommonLibrary.Models;
+using Microsoft.WindowsAzure.MobileServices;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -7,11 +8,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace CommonLibrary
+namespace CommonLibrary.Utils
 {
-    public static class MenuDownloader
+    public static class DownloadUtils
     {
-        public static async Task<bool> Execute(MobileServiceClient mobile_service)
+        public static async Task<bool> DownloadMenusAsync(MobileServiceClient mobile_service)
         {
             var week_numbers = new List<int> { WeekUtils.PreviousWeekNumber, WeekUtils.CurrentWeekNumber, WeekUtils.NextWeekNumber };
             var week_number_strings = week_numbers.Select(n => n.ToString());
@@ -29,7 +30,7 @@ namespace CommonLibrary
             foreach (var item in items_to_download)
             {
                 var week_number = Convert.ToInt32(item);
-                var week_result = await LoadAsync(mobile_service, week_number);
+                var week_result = await DownloadMenuAsync(mobile_service, week_number);
                 if (week_result)
                     result = true;
             }
@@ -37,7 +38,7 @@ namespace CommonLibrary
             return result;
         }
 
-        private static async Task<bool> LoadAsync(MobileServiceClient mobile_service, int week)
+        private static async Task<bool> DownloadMenuAsync(MobileServiceClient mobile_service, int week)
         {
             try
             {

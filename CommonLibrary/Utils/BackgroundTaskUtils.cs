@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 
-namespace CommonLibrary
+namespace CommonLibrary.Utils
 {
     public static class BackgroundTaskUtils
     {
@@ -13,14 +9,14 @@ namespace CommonLibrary
         {
             var state = await BackgroundExecutionManager.RequestAccessAsync();
 
-            var time_trigger = new TimeTrigger(60, false);
-            Register("UpdateTileBackgroundTask", time_trigger);
+            var update_tile_trigger = new TimeTrigger(60, false);
+            Register("UpdateTileBackgroundTask", update_tile_trigger);
 
-            var push_trigger = new PushNotificationTrigger();
-            Register("NewDataBackgroundTask", push_trigger);
+            var new_data_trigger = new PushNotificationTrigger();
+            Register("NewDataBackgroundTask", new_data_trigger);
 
-            var maintenance_trigger = new MaintenanceTrigger(15, true);
-            Register("UpdatePushChannelBackgroundTask", maintenance_trigger);
+            var update_push_channel_trigger = new MaintenanceTrigger(15, true);
+            Register("UpdatePushChannelBackgroundTask", update_push_channel_trigger);
         }
 
         private static void Register(string name, IBackgroundTrigger trigger)

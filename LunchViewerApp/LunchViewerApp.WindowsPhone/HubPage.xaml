@@ -105,15 +105,15 @@
             </HubSection>
             
             <HubSection Header="{Binding Header}"
-                        DataContext="{Binding CurrentWeekMenu}"
+                        DataContext="{Binding Menus.Current}"
                         ContentTemplate="{StaticResource MenuHubSectionTemplate}"/>
 
             <HubSection Header="{Binding Header}"
-                        DataContext="{Binding NextWeekMenu}"
+                        DataContext="{Binding Menus.Next}"
                         ContentTemplate="{StaticResource MenuHubSectionTemplate}"/>
 
             <HubSection Header="{Binding Header}"
-                        DataContext="{Binding PreviousWeekMenu}"
+                        DataContext="{Binding Menus.Previous}"
                         ContentTemplate="{StaticResource MenuHubSectionTemplate}"/>
         </Hub>
     </Grid>

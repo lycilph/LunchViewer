@@ -1,6 +1,6 @@
 ﻿using Microsoft.WindowsAzure.MobileServices;
 
-namespace CommonLibrary
+namespace CommonLibrary.Utils
 {
     public static class MobileServiceUtils
     {

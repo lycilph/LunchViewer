@@ -1,12 +1,12 @@
 ﻿using CommonLibrary;
+using CommonLibrary.Models;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using LunchViewerApp.Common;
 using System;
 using System.Windows.Input;
 using Windows.System;
 
-namespace LunchViewerApp.ViewModels
+namespace CommonLibrary.Viewmodels
 {
     public class ItemViewModel : ViewModelBase
     {
@@ -30,6 +30,16 @@ namespace LunchViewerApp.ViewModels
             set { Set(() => IsNext, ref _IsNext, value); }
         }
 
+        public bool IsToday
+        {
+            get { return DateTime.Now.Date.CompareTo(model.Date.Date) == 0; }
+        }
+
+        public bool IsTomorrow
+        {
+            get { return DateTime.Now.Date.AddDays(1).CompareTo(model.Date.Date) == 0; }
+        }
+
         public ICommand OrderCommand { get; private set; }
 
         public ItemViewModel(Item item)
@@ -37,16 +47,6 @@ namespace LunchViewerApp.ViewModels
             model = item;
 
             OrderCommand = new RelayCommand(Order);
-        }
-
-        public bool IsToday()
-        {
-            return DateTime.Now.Date.CompareTo(model.Date.Date) == 0;
-        }
-
-        public bool IsTomorrow()
-        {
-            return DateTime.Now.Date.AddDays(1).CompareTo(model.Date.Date) == 0;
         }
 
         private async void Order()

@@ -18,10 +18,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Common\AccentBrushConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\BooleanToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\DateFormatConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ItemViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MenuViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\NextItemViewModel.cs" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\LightGray.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\MediumGray.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\DarkGray.png" />

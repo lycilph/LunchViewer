@@ -1,4 +1,5 @@
 ﻿using CommonLibrary;
+using CommonLibrary.Utils;
 using Windows.ApplicationModel.Background;
 using Windows.Data.Xml.Dom;
 using Windows.Networking.PushNotifications;
@@ -17,7 +18,7 @@ namespace BackgroundTasks
             RawNotification notification = (RawNotification)taskInstance.TriggerDetails;
             if (notification.Content == "NewData")
             {
-                var data_found = await MenuDownloader.Execute(MobileServiceUtils.CreateMobileServiceClient());
+                var data_found = await DownloadUtils.DownloadMenusAsync(MobileServiceUtils.CreateMobileServiceClient());
 
                 if (data_found)
                 {

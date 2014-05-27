@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CommonLibrary
+namespace CommonLibrary.Models
 {
     public sealed class Menu
     {
