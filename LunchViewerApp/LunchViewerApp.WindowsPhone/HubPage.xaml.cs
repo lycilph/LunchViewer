@@ -1,42 +1,35 @@
-﻿using CommonLibrary.Utils;
-using CommonLibrary.Viewmodels;
-using LunchViewerApp.Common;
+﻿using LunchViewerApp.Common;
+
 using System;
-using System.Windows.Input;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel.Resources;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
-using Windows.UI.Notifications;
+using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
-
-// The Universal Hub Application project template is documented at http://go.microsoft.com/fwlink/?LinkID=391955
 
 namespace LunchViewerApp
 {
     public sealed partial class HubPage : Page
     {
-        private readonly MainViewModel view_model;
         private readonly NavigationHelper navigation_helper;
-        private readonly ResourceLoader resource_loader = ResourceLoader.GetForCurrentView("Resources");
-
-        public NavigationHelper NavigationHelper
-        {
-            get { return navigation_helper; }
-        }
-
-        public ICommand UpdateMenusCommand { get; set; }
+        private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
 
         public HubPage()
         {
             InitializeComponent();
-
-            view_model = new MainViewModel();
-            DataContext = view_model;
-
-            BackgroundTaskUtils.Initialize();
-
-            InitializeNotifications();
 
             // Hub is only supported in Portrait orientation
             DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
@@ -48,38 +41,30 @@ namespace LunchViewerApp
             navigation_helper.SaveState += NavigationHelper_SaveState;
         }
 
-        private void InitializeNotifications()
+        /// <summary>
+        /// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
+        /// </summary>
+        public NavigationHelper NavigationHelper
         {
-            TileUpdateManager.CreateTileUpdaterForApplication().EnableNotificationQueueForWide310x150(true);
+            get { return navigation_helper; }
         }
 
-        /// <summary>
-        /// Populates the page with content passed during navigation.  Any saved state is also
-        /// provided when recreating a page from a prior session.
-        /// </summary>
-        /// <param name="sender">
-        /// The source of the event; typically <see cref="NavigationHelper"/>
-        /// </param>
-        /// <param name="e">Event data that provides both the navigation parameter passed to
-        /// <see cref="Frame.Navigate(Type, object)"/> when this page was initially requested and
-        /// a dictionary of state preserved by this page during an earlier
-        /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            view_model.LoadState();
         }
 
-        /// <summary>
-        /// Preserves state associated with this page in case the application is suspended or the
-        /// page is discarded from the navigation cache.  Values must conform to the serialization
-        /// requirements of <see cref="SuspensionManager.SessionState"/>.
-        /// </summary>
-        /// <param name="sender">The source of the event; typically <see cref="NavigationHelper"/></param>
-        /// <param name="e">Event data that provides an empty dictionary to be populated with
-        /// serializable state.</param>
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
             // TODO: Save the unique state of the page here.
+        }
+
+        private void GroupSection_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            //var groupId = ((SampleDataGroup)e.ClickedItem).UniqueId;
+            //if (!Frame.Navigate(typeof(SectionPage), groupId))
+            //{
+            //    throw new Exception(resourceLoader.GetString("NavigationFailedExceptionMessage"));
+            //}
         }
 
         /// <summary>
@@ -87,35 +72,13 @@ namespace LunchViewerApp
         /// </summary>
         /// <param name="sender">The source of the click event.</param>
         /// <param name="e">Defaults about the click event.</param>
-        private void ItemClick(object sender, ItemClickEventArgs e)
+        private void ItemView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            ShowItem(e.ClickedItem as ItemViewModel);
-        }
-
-        private void NextItemClick(object sender, RoutedEventArgs e)
-        {
-            ShowItem(view_model.NextItem.ItemViewModel);
-        }
-
-        private void ShowItem(ItemViewModel item)
-        {
-            if (item == null)
-                return;
-
-            if (!Frame.Navigate(typeof(ItemPage), item))
-                throw new Exception(resource_loader.GetString("NavigationFailedExceptionMessage"));
-        }
-
-        private void ShowLogClick(object sender, RoutedEventArgs e)
-        {
-            if (!Frame.Navigate(typeof(LogPage)))
-                throw new Exception(resource_loader.GetString("NavigationFailedExceptionMessage"));
-        }
-
-        private void HomeClick(object sender, RoutedEventArgs e)
-        {
-            var first_section = hub_control.Sections[0];
-            hub_control.ScrollToSection(first_section);
+            //var itemId = ((SampleDataItem)e.ClickedItem).UniqueId;
+            //if (!Frame.Navigate(typeof(ItemPage), itemId))
+            //{
+            //    throw new Exception(resourceLoader.GetString("NavigationFailedExceptionMessage"));
+            //}
         }
 
         #region NavigationHelper registration

@@ -1,7 +1,5 @@
-﻿using CommonLibrary;
-using CommonLibrary.Utils;
-using LunchViewerApp.Common;
-using Microsoft.WindowsAzure.MobileServices;
+﻿using LunchViewerApp.Common;
+using LunchViewerApp.ViewModels;
 using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -19,11 +17,11 @@ namespace LunchViewerApp
     /// </summary>
     public sealed partial class App : Application
     {
-        public static MobileServiceClient MobileService = MobileServiceUtils.CreateMobileServiceClient();
-
 #if WINDOWS_PHONE_APP
         private TransitionCollection transitions;
 #endif
+
+        public ApplicationViewModel ViewModel { get; private set; }
 
         /// <summary>
         /// Initializes the singleton instance of the <see cref="App"/> class. This is the first line of authored code
@@ -33,7 +31,8 @@ namespace LunchViewerApp
         {
             InitializeComponent();
             Suspending += OnSuspending;
-            Resuming += OnResuming;
+
+            ViewModel = new ApplicationViewModel();
         }
 
         /// <summary>
@@ -47,11 +46,9 @@ namespace LunchViewerApp
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
-                this.DebugSettings.EnableFrameRateCounter = true;
+                DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
-
-            await Logger.WriteAsync("Launching app");
 
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -64,7 +61,8 @@ namespace LunchViewerApp
                 //Associate the frame with a SuspensionManager key                                
                 SuspensionManager.RegisterFrame(rootFrame, "AppFrame");
 
-                rootFrame.CacheSize = 2;
+                // This is just a guess at the correct cache size
+                rootFrame.CacheSize = 3;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
@@ -90,7 +88,7 @@ namespace LunchViewerApp
                 // Removes the turnstile navigation for startup.
                 if (rootFrame.ContentTransitions != null)
                 {
-                    this.transitions = new TransitionCollection();
+                    transitions = new TransitionCollection();
                     foreach (var c in rootFrame.ContentTransitions)
                     {
                         transitions.Add(c);
@@ -113,15 +111,10 @@ namespace LunchViewerApp
             // Ensure the current window is active
             Window.Current.Activate();
 
-            await PushNotificationUtils.UpdateChannelAsync(MobileService);
+            ViewModel.Initialize();
         }
 
 #if WINDOWS_PHONE_APP
-        /// <summary>
-        /// Restores the content transitions after the app has launched.
-        /// </summary>
-        /// <param name="sender">The object where the handler is attached.</param>
-        /// <param name="e">Details about the navigation event.</param>
         private void RootFrame_FirstNavigated(object sender, NavigationEventArgs e)
         {
             var rootFrame = sender as Frame;
@@ -130,21 +123,11 @@ namespace LunchViewerApp
         }
 #endif
 
-        /// <summary>
-        /// Invoked when application execution is being suspended.  Application state is saved
-        /// without knowing whether the application will be terminated or resumed with the contents
-        /// of memory still intact.
-        /// </summary>
         private async void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             await SuspensionManager.SaveAsync();
             deferral.Complete();
-        }
-
-        private async void OnResuming(object sender, object e)
-        {
-            await PushNotificationUtils.UpdateChannelAsync(MobileService);
         }
     }
 }

@@ -1,2 +1,0 @@
-MainPackage=C:\Users\kbn_mml\Documents\Visual Studio 2013\Projects\LunchViewer\LunchViewerApp\LunchViewerApp.WindowsPhone\bin\Release\LunchViewerApp.WindowsPhone_1.1.0.3_Bundle\LunchViewerApp.WindowsPhone_1.1.0.3_AnyCPU.appx
-ResourcePack=C:\Users\kbn_mml\Documents\Visual Studio 2013\Projects\LunchViewer\LunchViewerApp\LunchViewerApp.WindowsPhone\bin\Release\LunchViewerApp.WindowsPhone_1.1.0.3_Bundle\LunchViewerApp.WindowsPhone_1.1.0.3_scale-100.appx

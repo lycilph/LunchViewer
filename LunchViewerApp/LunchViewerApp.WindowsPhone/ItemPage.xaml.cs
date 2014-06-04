@@ -1,16 +1,24 @@
-﻿using CommonLibrary.Viewmodels;
-using LunchViewerApp.Common;
-using System;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
+﻿using LunchViewerApp.Common;
 
-// The Universal Hub Application project template is documented at http://go.microsoft.com/fwlink/?LinkID=391955
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Windows.Input;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
+using Windows.Graphics.Display;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Navigation;
 
 namespace LunchViewerApp
 {
-    /// <summary>
-    /// A page that displays details for a single item within a group.
-    /// </summary>
     public sealed partial class ItemPage : Page
     {
         private readonly NavigationHelper navigation_helper;
@@ -45,7 +53,6 @@ namespace LunchViewerApp
         /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            DataContext = e.NavigationParameter as ItemViewModel;
         }
 
         /// <summary>
@@ -63,18 +70,6 @@ namespace LunchViewerApp
 
         #region NavigationHelper registration
 
-        /// <summary>
-        /// The methods provided in this section are simply used to allow
-        /// NavigationHelper to respond to the page's navigation methods.
-        /// <para>
-        /// Page specific logic should be placed in event handlers for the
-        /// <see cref="NavigationHelper.LoadState"/>
-        /// and <see cref="NavigationHelper.SaveState"/>.
-        /// The navigation parameter is available in the LoadState method
-        /// in addition to page state preserved during an earlier session.
-        /// </para>
-        /// </summary>
-        /// <param name="e">Event data that describes how this page was reached.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigation_helper.OnNavigatedTo(e);

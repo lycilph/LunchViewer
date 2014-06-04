@@ -1,24 +1,20 @@
 ﻿<Page
     x:Class="LunchViewerApp.ItemPage"
+    DataContext="{Binding DefaultViewModel.Item, RelativeSource={RelativeSource Self}}"
+    d:DataContext="{Binding Groups[0].Items[0], Source={d:DesignData Source=../LunchViewerApp.Shared/DataModel/SampleData.json, Type=data:SampleDataSource}}"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:LunchViewerApp"
     xmlns:data="using:LunchViewerApp.Data"
-    xmlns:common="using:LunchViewerApp.Common"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    <Page.Resources>
-        <common:DateFormatConverter x:Key="date_converter" Format="dd MMM yyyy"/>
-        <common:DateFormatConverter x:Key="day_converter" Format="dddd"/>
-    </Page.Resources>
-    
     <Page.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition>
                 <NavigationThemeTransition.DefaultNavigationTransitionInfo>
-                    <ContinuumNavigationTransitionInfo/>
+                    <ContinuumNavigationTransitionInfo></ContinuumNavigationTransitionInfo>
                 </NavigationThemeTransition.DefaultNavigationTransitionInfo>
             </NavigationThemeTransition>
         </TransitionCollection>
@@ -36,16 +32,16 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- TitlePanel -->
-        <StackPanel Grid.Row="0" Margin="24,17,0,28">
-            <TextBlock Text="LunchViewer" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
-            <TextBlock Text="{Binding Date, Converter={StaticResource day_converter}}" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
-            <TextBlock Text="{Binding Date, Converter={StaticResource date_converter}}" Style="{ThemeResource SubheaderTextBlockStyle}"/>
+        <!-- Title Panel -->
+        <StackPanel Grid.Row="0" Margin="19,0,0,0">
+            <TextBlock x:Uid="Header" Text="application name" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0" />
+            <TextBlock Text="{Binding Title}" Style="{ThemeResource HeaderTextBlockStyle}" Margin="0,-6.5,0,26.5" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Margin="24,0,24,0" x:Name="ContentRoot">
-            <TextBlock Text="{Binding Text}" TextWrapping="WrapWholeWords" Style="{ThemeResource BodyTextBlockStyle}"/>
-            <Button Content="Order" Command="{Binding OrderCommand}" Margin="0,24,0,0"/>
-        </StackPanel>
+        <!--TODO: Content should be placed within the following grid 
+                  to show details for the current item -->
+        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
+
+        </Grid>
     </Grid>
 </Page>
