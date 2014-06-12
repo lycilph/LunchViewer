@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en-US" target-language="da-DK" original="LunchViewerApp_Multilingual.prilog.xml" tool-id="MultilingualAppToolkit" product-name="LunchViewerApp" product-version="1.0.0.0" build-num="0">
+    <header>
+      <tool tool-id="MultilingualAppToolkit" tool-name="Multilingual App Toolkit" tool-version="3.0.1200.0" tool-company="Microsoft" />
+    </header>
+    <body>
+      <group id="Resources">
+        <trans-unit id="Resources\Unknown" translate="yes" xml:space="preserve">
+          <source>Unknown</source>
+          <target state="translated">Ukendt</target>
+        </trans-unit>
+        <trans-unit id="Resources\Today" translate="yes" xml:space="preserve">
+          <source>Today</source>
+          <target state="translated" state-qualifier="tm-suggestion">I dag</target>
+        </trans-unit>
+        <trans-unit id="Resources\Tomorrow" translate="yes" xml:space="preserve">
+          <source>Tomorrow</source>
+          <target state="translated" state-qualifier="tm-suggestion">i morgen</target>
+        </trans-unit>
+        <trans-unit id="Resources\PreviousWeekHeader" translate="yes" xml:space="preserve">
+          <source>Previous (week {0})</source>
+          <target state="translated" state-qualifier="mt-suggestion">Forrige (uge {0})</target>
+        </trans-unit>
+        <trans-unit id="Resources\None" translate="yes" xml:space="preserve">
+          <source>None</source>
+          <target state="translated" state-qualifier="tm-suggestion">Ingen</target>
+        </trans-unit>
+        <trans-unit id="Resources\NextWeekHeader" translate="yes" xml:space="preserve">
+          <source>Next (week {0})</source>
+          <target state="translated" state-qualifier="mt-suggestion">Næste (uge {0})</target>
+        </trans-unit>
+        <trans-unit id="Resources\NavigationFailedExceptionMessage" translate="yes" xml:space="preserve">
+          <source>Navigation failed.</source>
+          <target state="translated" state-qualifier="tm-suggestion">Navigationen mislykkedes.</target>
+        </trans-unit>
+        <trans-unit id="Resources\Menu\Text" translate="yes" xml:space="preserve">
+          <source>None</source>
+          <target state="translated" state-qualifier="tm-suggestion">Ingen</target>
+        </trans-unit>
+        <trans-unit id="Resources\HubHeader\Text" translate="yes" xml:space="preserve">
+          <source>LunchViewer</source>
+          <target state="translated">LunchViewer</target>
+        </trans-unit>
+        <trans-unit id="Resources\CurrentWeekHeader" translate="yes" xml:space="preserve">
+          <source>Current (week {0})</source>
+          <target state="translated" state-qualifier="mt-suggestion">Aktuel (uge {0})</target>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>

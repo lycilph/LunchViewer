@@ -1,10 +1,10 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using LunchViewerService.Models;
+using MimeKit;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using HtmlAgilityPack;
-using LunchViewerService.Models;
-using MimeKit;
 
 namespace LunchViewerService.Utils
 {

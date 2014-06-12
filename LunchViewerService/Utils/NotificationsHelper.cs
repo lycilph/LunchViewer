@@ -26,10 +26,5 @@ namespace LunchViewerService.Utils
                 services.Log.Info(string.Format("Notification outcome {0}", outcome.State));
             }
         }
-
-        public static void SendNotification(Menu menu, ApiServices services)
-        {
-            SendNotificationAsync(menu, services).Wait();
-        }
     }
 }

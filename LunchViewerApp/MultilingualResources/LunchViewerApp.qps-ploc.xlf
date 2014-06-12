@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en-US" target-language="qps-ploc" original="LunchViewerApp_Multilingual.prilog.xml" tool-id="MultilingualAppToolkit" product-name="LunchViewerApp" product-version="1.0.0.0" build-num="0">
+    <header>
+      <tool tool-id="MultilingualAppToolkit" tool-name="Multilingual App Toolkit" tool-version="3.0.1200.0" tool-company="Microsoft" />
+    </header>
+    <body>
+      <group id="Resources">
+        <trans-unit id="Resources\Unknown" translate="yes" xml:space="preserve">
+          <source>Unknown</source>
+          <target state="needs-review-translation" state-qualifier="mt-suggestion">[365AF][!!_Ùηķиòẁи_!!]</target>
+        </trans-unit>
+        <trans-unit id="Resources\Today" translate="yes" xml:space="preserve">
+          <source>Today</source>
+          <target state="needs-review-translation" state-qualifier="mt-suggestion">[588FF][!!_Ţõðáŷ_!!]</target>
+        </trans-unit>
+        <trans-unit id="Resources\Tomorrow" translate="yes" xml:space="preserve">
+          <source>Tomorrow</source>
+          <target state="needs-review-translation" state-qualifier="mt-suggestion">[D0B54][!!_Ţóмóřѓõŵ_!!]</target>
+        </trans-unit>
+        <trans-unit id="Resources\PreviousWeekHeader" translate="yes" xml:space="preserve">
+          <source>Previous (week {0})</source>
+          <target state="needs-review-translation" state-qualifier="mt-suggestion">[5A824][!!_Þŗéνìôùş (ŵéęк {0})_!!!!!!]</target>
+        </trans-unit>
+        <trans-unit id="Resources\None" translate="yes" xml:space="preserve">
+          <source>None</source>
+          <target state="needs-review-translation" state-qualifier="mt-suggestion">[71B60][!!_Ňòηê_!!]</target>
+        </trans-unit>
+        <trans-unit id="Resources\NextWeekHeader" translate="yes" xml:space="preserve">
+          <source>Next (week {0})</source>
+          <target state="needs-review-translation" state-qualifier="mt-suggestion">[7C946][!!_Ńèхť (ẅèęĸ {0})_!!!!]</target>
+        </trans-unit>
+        <trans-unit id="Resources\NavigationFailedExceptionMessage" translate="yes" xml:space="preserve">
+          <source>Navigation failed.</source>
+          <target state="needs-review-translation" state-qualifier="mt-suggestion">[EEE5C][!!_Ňáνîĝáтîòή ƒâìľèď._!!!!!!]</target>
+        </trans-unit>
+        <trans-unit id="Resources\Menu\Text" translate="yes" xml:space="preserve">
+          <source>None</source>
+          <target state="needs-review-translation" state-qualifier="mt-suggestion">[E0AF5][!!_Ňõήè_!!]</target>
+        </trans-unit>
+        <trans-unit id="Resources\HubHeader\Text" translate="yes" xml:space="preserve">
+          <source>LunchViewer</source>
+          <target state="new">LunchViewer</target>
+        </trans-unit>
+        <trans-unit id="Resources\CurrentWeekHeader" translate="yes" xml:space="preserve">
+          <source>Current (week {0})</source>
+          <target state="needs-review-translation" state-qualifier="mt-suggestion">[44D4D][!!_Ċûřŕéиτ (ẃęęќ {0})_!!!!!!]</target>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>
