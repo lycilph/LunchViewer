@@ -6,6 +6,10 @@
     </header>
     <body>
       <group id="Resources">
+        <trans-unit id="Resources\UpdateButton\Label" translate="yes" xml:space="preserve">
+          <source>Update Now</source>
+          <target state="new">Update Now</target>
+        </trans-unit>
         <trans-unit id="Resources\Unknown" translate="yes" xml:space="preserve">
           <source>Unknown</source>
           <target state="needs-review-translation" state-qualifier="mt-suggestion">[365AF][!!_Ùηķиòẁи_!!]</target>
@@ -21,6 +25,10 @@
         <trans-unit id="Resources\PreviousWeekHeader" translate="yes" xml:space="preserve">
           <source>Previous (week {0})</source>
           <target state="needs-review-translation" state-qualifier="mt-suggestion">[5A824][!!_Þŗéνìôùş (ŵéęк {0})_!!!!!!]</target>
+        </trans-unit>
+        <trans-unit id="Resources\OrderButton\Content" translate="yes" xml:space="preserve">
+          <source>Order</source>
+          <target state="needs-review-translation" state-qualifier="mt-suggestion">[6F5DE][!!_Óŗðèѓ_!!]</target>
         </trans-unit>
         <trans-unit id="Resources\None" translate="yes" xml:space="preserve">
           <source>None</source>
@@ -38,13 +46,29 @@
           <source>None</source>
           <target state="needs-review-translation" state-qualifier="mt-suggestion">[E0AF5][!!_Ňõήè_!!]</target>
         </trans-unit>
-        <trans-unit id="Resources\HubHeader\Text" translate="yes" xml:space="preserve">
-          <source>LunchViewer</source>
-          <target state="new">LunchViewer</target>
+        <trans-unit id="Resources\LogButton\Label" translate="yes" xml:space="preserve">
+          <source>Show Log</source>
+          <target state="new">Show Log</target>
+        </trans-unit>
+        <trans-unit id="Resources\Log\Text" translate="yes" xml:space="preserve">
+          <source>Log</source>
+          <target state="new">Log</target>
+        </trans-unit>
+        <trans-unit id="Resources\HomeButton\Label" translate="yes" xml:space="preserve">
+          <source>Home</source>
+          <target state="new">Home</target>
         </trans-unit>
         <trans-unit id="Resources\CurrentWeekHeader" translate="yes" xml:space="preserve">
           <source>Current (week {0})</source>
           <target state="needs-review-translation" state-qualifier="mt-suggestion">[44D4D][!!_Ċûřŕéиτ (ẃęęќ {0})_!!!!!!]</target>
+        </trans-unit>
+        <trans-unit id="Resources\ClearLogButton\Label" translate="yes" xml:space="preserve">
+          <source>Clear Log</source>
+          <target state="new">Clear Log</target>
+        </trans-unit>
+        <trans-unit id="Resources\AppHeader\Text" translate="yes" xml:space="preserve">
+          <source>LunchViewer</source>
+          <target state="new">LunchViewer</target>
         </trans-unit>
       </group>
     </body>

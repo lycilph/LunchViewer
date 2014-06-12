@@ -1,4 +1,5 @@
 ﻿using Core;
+using LunchViewerApp.Common;
 using Microsoft.WindowsAzure.MobileServices;
 using Newtonsoft.Json;
 using System;
@@ -13,6 +14,8 @@ namespace LunchViewerApp.Models
     {
         public static async Task<bool> UpdateMenusAsync(MobileServiceClient mobile_service)
         {
+            await Logger.WriteAsync("Updating menus");
+
             var menu_container = ApplicationData.Current.LocalSettings.CreateContainer("menus", ApplicationDataCreateDisposition.Always);
             var week_number_strings = DateUtils.Weeks.Select(n => n.ToString());
 
@@ -45,6 +48,8 @@ namespace LunchViewerApp.Models
                 if (menus.Any())
                 {
                     var menu = menus.First();
+
+                    await Logger.WriteAsync(string.Format("Downloading menu for week {0}", menu.Week));
 
                     var items_table = mobile_service.GetTable<Item>();
                     var items = await items_table.Where(i => i.ParentId == menu.MenuId).ToListAsync();

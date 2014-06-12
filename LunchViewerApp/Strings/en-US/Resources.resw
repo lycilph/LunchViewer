@@ -117,11 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AppHeader.Text" xml:space="preserve">
+    <value>LunchViewer</value>
+  </data>
+  <data name="ClearLogButton.Label" xml:space="preserve">
+    <value>Clear Log</value>
+  </data>
   <data name="CurrentWeekHeader" xml:space="preserve">
     <value>Current (week {0})</value>
   </data>
-  <data name="HubHeader.Text" xml:space="preserve">
-    <value>LunchViewer</value>
+  <data name="HomeButton.Label" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Log.Text" xml:space="preserve">
+    <value>Log</value>
+  </data>
+  <data name="LogButton.Label" xml:space="preserve">
+    <value>Show Log</value>
   </data>
   <data name="Menu.Text" xml:space="preserve">
     <value>None</value>
@@ -135,6 +147,9 @@
   <data name="None" xml:space="preserve">
     <value>None</value>
   </data>
+  <data name="OrderButton.Content" xml:space="preserve">
+    <value>Order</value>
+  </data>
   <data name="PreviousWeekHeader" xml:space="preserve">
     <value>Previous (week {0})</value>
   </data>
@@ -146,5 +161,8 @@
   </data>
   <data name="Unknown" xml:space="preserve">
     <value>Unknown</value>
+  </data>
+  <data name="UpdateButton.Label" xml:space="preserve">
+    <value>Update Now</value>
   </data>
 </root>

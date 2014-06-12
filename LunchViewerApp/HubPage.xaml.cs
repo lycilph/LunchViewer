@@ -69,6 +69,12 @@ namespace LunchViewerApp
             HubControl.ScrollToSection(first_section);
         }
 
+        private void ShowLogClick(object sender, RoutedEventArgs e)
+        {
+            if (!Frame.Navigate(typeof(LogPage)))
+                throw new Exception(resource_loader.GetString("NavigationFailedExceptionMessage"));
+        }
+
         #region NavigationHelper registration
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

@@ -3,9 +3,16 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:common="using:LunchViewerApp.Common"
+      xmlns:viewModels="using:LunchViewerApp.ViewModels"
       mc:Ignorable="d"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    
+
+    <Page.Resources>
+        <common:DateFormatConverter x:Key="date_converter" Format="dd MMM yyyy"/>
+        <common:DateFormatConverter x:Key="day_converter" Format="dddd"/>
+    </Page.Resources>
+
     <Page.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition>
@@ -16,7 +23,7 @@
         </TransitionCollection>
     </Page.Transitions>
 
-    <Grid>
+    <Grid d:DataContext="{d:DesignInstance viewModels:ItemViewModel}">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>
@@ -27,18 +34,16 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Title Panel -->
-        <StackPanel Grid.Row="0" Margin="19,0,0,0">
-            <TextBlock x:Uid="Header" Text="application name" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0" />
-            <TextBlock Text="{Binding Title}" Style="{ThemeResource HeaderTextBlockStyle}" Margin="0,-6.5,0,26.5" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+        <!-- TitlePanel -->
+        <StackPanel Grid.Row="0" Margin="24,17,0,28">
+            <TextBlock x:Uid="AppHeader" Text="[LunchViewer]" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
+            <TextBlock Text="{Binding Date, Converter={StaticResource day_converter}}" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
+            <TextBlock Text="{Binding Date, Converter={StaticResource date_converter}}" Style="{ThemeResource SubheaderTextBlockStyle}"/>
         </StackPanel>
 
-        <!-- 
-            TODO: Content should be placed within the following grid 
-                  to show details for the current item
-        -->
-        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-
-        </Grid>
+        <StackPanel Grid.Row="1" Margin="24,0,24,0">
+            <TextBlock Text="{Binding Text}" TextWrapping="WrapWholeWords" Style="{ThemeResource BodyTextBlockStyle}"/>
+            <Button x:Uid="OrderButton" Content="[Order]" Command="{Binding OrderCommand}" Margin="0,24,0,0"/>
+        </StackPanel>
     </Grid>
 </Page>

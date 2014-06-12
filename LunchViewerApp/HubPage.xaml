@@ -89,7 +89,7 @@
         <Hub x:Name="HubControl" Background="{ThemeResource HubBackgroundImageBrush}">
             <Hub.Header>
                 <StackPanel>
-                    <TextBlock x:Uid="HubHeader" Text="[LunchViewer]"/>
+                    <TextBlock x:Uid="AppHeader" Text="[LunchViewer]"/>
                     <Grid>
                         <Rectangle Height="10"/>
                         <ProgressBar Height="10"
@@ -126,10 +126,10 @@
 
     <Page.BottomAppBar>
         <CommandBar ClosedDisplayMode="Minimal">
-            <AppBarButton Icon="Home" Label="Home" Click="HomeClick"/>
+            <AppBarButton x:Uid="HomeButton" Icon="Home" Label="[Home]" Click="HomeClick"/>
             <CommandBar.SecondaryCommands>
-                <AppBarButton Icon="Refresh" Label="Update now" Command="{Binding UpdateNowCommand}"/>
-                <!--<AppBarButton Icon="Setting" Label="Show log" Click="ShowLogClick"/>-->
+                <AppBarButton x:Uid="UpdateButton" Icon="Refresh" Label="[Update now]" Command="{Binding UpdateNowCommand}"/>
+                <AppBarButton x:Uid="LogButton" Icon="Setting" Label="[Show log]" Click="ShowLogClick"/>
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
