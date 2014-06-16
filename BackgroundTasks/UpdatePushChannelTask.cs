@@ -8,7 +8,7 @@ namespace BackgroundTasks
     {
         public async void Run(IBackgroundTaskInstance taskInstance)
         {
-            BackgroundTaskDeferral deferral = taskInstance.GetDeferral();
+            var deferral = taskInstance.GetDeferral();
 
             await Logger.WriteAsync("Update push notification channel (background)");
 

@@ -37,6 +37,11 @@
             <Task Type="systemEvent" />
           </BackgroundTasks>
         </Extension>
+        <Extension Category="windows.backgroundTasks" EntryPoint="BackgroundTasks.NewDataTask">
+          <BackgroundTasks>
+            <Task Type="pushNotification" />
+          </BackgroundTasks>
+        </Extension>
       </Extensions>
     </Application>
   </Applications>

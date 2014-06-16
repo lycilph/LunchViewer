@@ -118,8 +118,6 @@
     <Content Include="Assets\background.theme-dark.png" />
     <Content Include="Assets\background.theme-light.png" />
     <Content Include="Assets\BadgeLogo.scale-240.png" />
-    <Content Include="Assets\HubBackground.theme-dark.png" />
-    <Content Include="Assets\HubBackground.theme-light.png" />
     <Content Include="Assets\Logo.scale-240.png" />
     <Content Include="Assets\SmallLogo.scale-240.png" />
     <Content Include="Assets\SplashScreen.scale-240.png" />

@@ -18,8 +18,8 @@ namespace LunchViewerApp.Controllers
             var update_push_channel_trigger = new MaintenanceTrigger(15, true);
             Register("UpdatePushChannelTask", update_push_channel_trigger);
 
-            //var new_data_trigger = new PushNotificationTrigger();
-            //Register("NewDataBackgroundTask", new_data_trigger);
+            var new_data_trigger = new PushNotificationTrigger();
+            Register("NewDataTask", new_data_trigger);
         }
 
         private static void Register(string name, IBackgroundTrigger trigger)
