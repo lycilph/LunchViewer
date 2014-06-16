@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LunchViewerApp.Models
+namespace Core.Models
 {
     public sealed class Menu
     {

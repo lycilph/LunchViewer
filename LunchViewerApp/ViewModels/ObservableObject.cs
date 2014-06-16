@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace Core
+namespace LunchViewerApp.ViewModels
 {
     public class ObservableObject : INotifyPropertyChanged
     {

@@ -1,10 +1,8 @@
 ﻿using Core;
-using LunchViewerApp.Models;
-using Newtonsoft.Json;
+using Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Windows.Storage;
 
 namespace LunchViewerApp.ViewModels
 {
@@ -55,21 +53,19 @@ namespace LunchViewerApp.ViewModels
             return Items.FirstOrDefault(item => item.Date.Date == date.Date);
         }
 
-        public void Read(int week)
+        public void Read(int week_number)
         {
-            if (week == model.Week)
+            if (week_number == model.Week)
                 return;
 
-            Header = string.Format(header_format, week);
+            Header = string.Format(header_format, week_number);
 
-            var menu_container = ApplicationData.Current.LocalSettings.CreateContainer("menus", ApplicationDataCreateDisposition.Always);
-            var serialized_menu = menu_container.Values[week.ToString()] as string;
-            if (serialized_menu == null) return;
+            var week = MenuController.ReadMenu(week_number);
+            if (week == null)
+                return;
 
-            var type = new { Menu = new Menu(), Items = new List<Item>() };
-            var obj = JsonConvert.DeserializeAnonymousType(serialized_menu, type);
-            model = obj.Menu;
-            Items = obj.Items.Select(i => new ItemViewModel(i)).ToList();
+            model = week.Menu;
+            Items = week.Items.Select(i => new ItemViewModel(i)).ToList();
         }
     }
 }

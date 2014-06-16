@@ -1,17 +1,25 @@
-﻿using Core;
-using LunchViewerApp.Common;
+﻿using Core.Models;
 using Microsoft.WindowsAzure.MobileServices;
 using Newtonsoft.Json;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace LunchViewerApp.Models
+namespace Core
 {
-    public class AppController
+    public static class MenuController
     {
+        public static Week ReadMenu(int week)
+        {
+            var menu_container = ApplicationData.Current.LocalSettings.CreateContainer("menus", ApplicationDataCreateDisposition.Always);
+            var serialized_menu = menu_container.Values[week.ToString()] as string;
+            if (serialized_menu == null)
+                return null;
+
+            return JsonConvert.DeserializeObject<Week>(serialized_menu);
+        }
+
         public static async Task<bool> UpdateMenusAsync(MobileServiceClient mobile_service)
         {
             await Logger.WriteAsync("Updating menus");
@@ -38,12 +46,13 @@ namespace LunchViewerApp.Models
             return result;
         }
 
-        private static async Task<bool> DownloadMenuAsync(MobileServiceClient mobile_service, int week)
+        private static async Task<bool> DownloadMenuAsync(MobileServiceClient mobile_service, int week_number)
         {
+            var error_message = string.Empty;
             try
             {
                 var menus_table = mobile_service.GetTable<Menu>();
-                var menus = await menus_table.Where(m => m.Week == week).ToListAsync();
+                var menus = await menus_table.Where(m => m.Week == week_number).ToListAsync();
 
                 if (menus.Any())
                 {
@@ -55,16 +64,19 @@ namespace LunchViewerApp.Models
                     var items = await items_table.Where(i => i.ParentId == menu.MenuId).ToListAsync();
 
                     var menu_container = ApplicationData.Current.LocalSettings.CreateContainer("menus", ApplicationDataCreateDisposition.Always);
-                    var serialized_menu = JsonConvert.SerializeObject(new { Menu = menu, Items = items });
-                    menu_container.Values[week.ToString()] = serialized_menu;
+                    var serialized_menu = JsonConvert.SerializeObject(new Week(menu, items));
+                    menu_container.Values[week_number.ToString()] = serialized_menu;
 
                     return true;
                 }
             }
             catch (MobileServiceInvalidOperationException e)
             {
-                Debug.WriteLine("Error: " + e.Message);
+                error_message = "Error: " + e.Message;
             }
+
+            if (!string.IsNullOrWhiteSpace(error_message))
+                await Logger.WriteAsync(error_message);
 
             return false;
         }

@@ -1,7 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using Core;
+using LunchViewerApp.Common;
+using System.Collections.ObjectModel;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
-using LunchViewerApp.Common;
 
 namespace LunchViewerApp
 {

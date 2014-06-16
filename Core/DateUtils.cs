@@ -16,6 +16,13 @@ namespace Core
             return DateTime.Now.AddDays(1).Date.CompareTo(date.Date) == 0;
         }
 
+        public static DateTime GetNextLunchDate()
+        {
+            var now = DateTime.Now;
+            var lunch_end = new DateTime(now.Year, now.Month, now.Day, 13, 15, 0); // Lunch ends at 13:15
+            return (now.CompareTo(lunch_end) < 0 ? now : now.AddDays(1));
+        }
+
         public static int PreviousWeekNumber
         {
             get { return GetPreviousWeekNumber(); }

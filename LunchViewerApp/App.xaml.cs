@@ -1,4 +1,5 @@
 ﻿using LunchViewerApp.Common;
+using LunchViewerApp.Controllers;
 using Microsoft.WindowsAzure.MobileServices;
 using System;
 using Windows.ApplicationModel;
@@ -100,6 +101,9 @@ namespace LunchViewerApp
 
             // Ensure the current window is active.
             Window.Current.Activate();
+
+            NotificationsController.InitializeNotifications();
+            BackgroundTaskController.RegisterBackgroundTasks();
         }
 
         /// <summary>

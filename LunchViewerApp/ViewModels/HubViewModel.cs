@@ -1,6 +1,5 @@
 ﻿using Core;
 using LunchViewerApp.Common;
-using LunchViewerApp.Models;
 using System;
 using System.Linq;
 using System.Windows.Input;
@@ -43,7 +42,7 @@ namespace LunchViewerApp.ViewModels
         {
             IsBusy = true;
 
-            await AppController.UpdateMenusAsync(App.MobileService);
+            await MenuController.UpdateMenusAsync(App.MobileService);
 
             Menus.ZipAndApply(DateUtils.Weeks, (model, week) => model.Read(week));
             UpdateNextItem();
@@ -67,23 +66,17 @@ namespace LunchViewerApp.ViewModels
 
         private ItemViewModel FindNextItem()
         {
-            ItemViewModel result = null;
+            ItemViewModel next_item_candidate = null;
 
             // Find next item (in current week)
             if (Menus.Current.HasItems)
-            {
-                var now = DateTime.Now;
-                var lunch_end = new DateTime(now.Year, now.Month, now.Day, 13, 15, 0); // Lunch ends at 13:15
-                var next_date = now.CompareTo(lunch_end) < 0 ? now : now.AddDays(1);
-
-                result = Menus.Current.Get(next_date);
-            }
+                next_item_candidate = Menus.Current.Get(DateUtils.GetNextLunchDate());
 
             // If nothing was found choose the first item of the next week (if present)
-            if (result == null && Menus.Next.HasItems)
-                result = Menus.Next.Items.First();
+            if (next_item_candidate == null && Menus.Next.HasItems)
+                next_item_candidate = Menus.Next.Items.First();
 
-            return result;
+            return next_item_candidate;
         }
     }
 }

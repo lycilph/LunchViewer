@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Windows.ApplicationModel.Resources;
-using Core;
 
 namespace LunchViewerApp.ViewModels
 {

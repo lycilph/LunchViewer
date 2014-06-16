@@ -1,6 +1,5 @@
-﻿using Core;
+﻿using Core.Models;
 using LunchViewerApp.Common;
-using LunchViewerApp.Models;
 using System;
 using System.Windows.Input;
 using Windows.System;

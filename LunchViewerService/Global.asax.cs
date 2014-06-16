@@ -1,7 +1,4 @@
-﻿using System.Web.Http;
-using System.Web.Routing;
-
-namespace LunchViewerService
+﻿namespace LunchViewerService
 {
     public class WebApiApplication : System.Web.HttpApplication
     {
