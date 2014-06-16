@@ -1,12 +1,12 @@
-﻿using Core.Models;
-using Microsoft.WindowsAzure.MobileServices;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Core.Models;
+using Microsoft.WindowsAzure.MobileServices;
+using Newtonsoft.Json;
 
-namespace Core
+namespace Core.Controllers
 {
     public static class MenuController
     {

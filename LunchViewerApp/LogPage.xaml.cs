@@ -48,6 +48,11 @@ namespace LunchViewerApp
             Lines.Clear();
         }
 
+        private async void RefreshLogClick(object sender, RoutedEventArgs e)
+        {
+            Lines = new ObservableCollection<string>(await Logger.ReadAsync());
+        }
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigation_helper.OnNavigatedTo(e);

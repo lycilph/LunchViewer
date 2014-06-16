@@ -153,6 +153,9 @@
   <data name="PreviousWeekHeader" xml:space="preserve">
     <value>Previous (week {0})</value>
   </data>
+  <data name="RefreshLogButton.Label" xml:space="preserve">
+    <value>Refresh Log</value>
+  </data>
   <data name="Today" xml:space="preserve">
     <value>Today</value>
   </data>

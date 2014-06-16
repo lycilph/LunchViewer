@@ -18,6 +18,10 @@
           <source>Today</source>
           <target state="needs-review-translation" state-qualifier="mt-suggestion">[588FF][!!_Ţõðáŷ_!!]</target>
         </trans-unit>
+        <trans-unit id="Resources\RefreshLogButton\Label" translate="yes" xml:space="preserve">
+          <source>Refresh Log</source>
+          <target state="new">Refresh Log</target>
+        </trans-unit>
         <trans-unit id="Resources\Tomorrow" translate="yes" xml:space="preserve">
           <source>Tomorrow</source>
           <target state="needs-review-translation" state-qualifier="mt-suggestion">[D0B54][!!_Ţóмóřѓõŵ_!!]</target>

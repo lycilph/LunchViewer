@@ -1,4 +1,5 @@
-﻿using LunchViewerApp.Common;
+﻿using Core.Controllers;
+using LunchViewerApp.Common;
 using LunchViewerApp.Controllers;
 using Microsoft.WindowsAzure.MobileServices;
 using System;
@@ -13,7 +14,7 @@ namespace LunchViewerApp
 {
     public sealed partial class App
     {
-        public static MobileServiceClient MobileService = new MobileServiceClient("https://lunchviewer.azure-mobile.net/", "SVzovNQtJGFXALLJDUskHXIZqDSBwL46");
+        public static MobileServiceClient MobileService = MobileServiceController.CreateMobileServiceClient();
 
         private TransitionCollection transitions;
 
@@ -104,6 +105,7 @@ namespace LunchViewerApp
 
             NotificationsController.InitializeNotifications();
             BackgroundTaskController.RegisterBackgroundTasks();
+            await PushNotificationController.UpdateChannelAsync(MobileService);
         }
 
         /// <summary>

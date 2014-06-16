@@ -47,6 +47,7 @@
     <Page.BottomAppBar>
         <CommandBar>
             <AppBarButton x:Uid="ClearLogButton" Icon="Clear" Label="[Clear log]" Click="ClearLogClick"/>
+            <AppBarButton x:Uid="RefreshLogButton" Icon="Refresh"  Label="[Refresh log]" Click="RefreshLogClick"/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>
