@@ -1,5 +1,4 @@
-﻿using Core;
-using LunchViewerService.DataObjects;
+﻿using LunchViewerService.DataObjects;
 using LunchViewerService.Models;
 using LunchViewerService.Utils;
 using MailKit;
@@ -61,6 +60,8 @@ namespace LunchViewerService.ScheduledJobs
                             var indices = unread_mails.Select(s => s.Index).ToArray();
                             inbox.AddFlags(indices, MessageFlags.Seen, true, cancel.Token);
 
+                            var send_notification = false;
+
                             foreach (var summary in unread_mails)
                             {
                                 var message = inbox.GetMessage(summary.Index);
@@ -73,7 +74,7 @@ namespace LunchViewerService.ScheduledJobs
                                     if (EmailHelper.TryParseMessage(message, out menu))
                                     {
                                         SaveMenu(menu);
-                                        await NotificationsHelper.SendNotificationAsync(menu, Services);
+                                        send_notification = true;
                                     }
                                 }
                                 else
@@ -84,6 +85,9 @@ namespace LunchViewerService.ScheduledJobs
                                     Services.Log.Info(error_message);
                                 }
                             }
+
+                            if (send_notification)
+                                await NotificationsHelper.SendNotificationAsync(Services);
                         }
 
                         client.Disconnect(true, cancel.Token);
