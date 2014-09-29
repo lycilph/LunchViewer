@@ -27,7 +27,7 @@ namespace LunchViewerService.ScheduledJobs
             }
             catch (Exception e)
             {
-                var msg = string.Format("{0} {1}", e.GetType(), e.Message)
+                var msg = string.Format("{0} {1}", e.GetType(), e.Message);
                 AddError("General Error", msg);
                 Services.Log.Info(msg);
             }
