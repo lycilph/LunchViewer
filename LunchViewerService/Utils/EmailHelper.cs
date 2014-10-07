@@ -1,5 +1,5 @@
 ﻿using HtmlAgilityPack;
-using LunchViewerService.Models;
+using LunchViewerService.DataObjects;
 using MimeKit;
 using System;
 using System.Globalization;
@@ -32,7 +32,7 @@ namespace LunchViewerService.Utils
                         week = int.Parse(matches[0].Groups[2].ToString());
                     var year = DateTime.Now.Year;
 
-                    menu = new Menu(year, week);
+                    menu = new Menu {Year = year, Week = week};
 
                     // Find the individual items (or days)
                     var items = doc.DocumentNode.Descendants().Where(n => n.Name == "td" &&
@@ -47,11 +47,11 @@ namespace LunchViewerService.Utils
                         var text = string.Format("{0} {1}", HtmlEntity.DeEntitize(rows[3]).Trim(), HtmlEntity.DeEntitize(rows[4]).Trim());
                         var link = item.Descendants("a").Select(n => n.Attributes["href"].Value).Single();
 
-                        menu.Add(date, text, link);
+                        //menu.Add(date, text, link);
                     }
 
                     // Success if we found any items and a valid week number
-                    return week > -1 && menu.ItemEntities.Any();
+                    return week > -1 && menu.Items.Any();
                 }
             }
 

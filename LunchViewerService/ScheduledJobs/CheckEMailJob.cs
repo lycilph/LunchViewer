@@ -1,33 +1,26 @@
-﻿using LunchViewerService.DataObjects;
-using LunchViewerService.Models;
-using LunchViewerService.Utils;
-using MailKit;
-using MailKit.Net.Imap;
-using Microsoft.WindowsAzure.Mobile.Service;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
+using LunchViewerService.DataObjects;
+using LunchViewerService.Models;
+using LunchViewerService.Utils;
+using MailKit;
+using MailKit.Net.Imap;
+using Microsoft.WindowsAzure.Mobile.Service;
 
 namespace LunchViewerService.ScheduledJobs
 {
-    // A scheduled job which can be invoked manually by submitting an HTTP
-    // POST request to the path "/jobs/CheckEMail".
+    // A simple scheduled job which can be invoked manually by submitting an HTTP
+    // POST request to the path "/jobs/CheckEmail".
 
-    public class CheckEMailJob : ScheduledJob
+    public class CheckEmailJob : ScheduledJob
     {
-        private CloudTable menu_table;
-        private CloudTable item_table;
-        private CloudTable error_table;
-
-        public async override Task ExecuteAsync()
+        public override async Task ExecuteAsync()
         {
-            GetOrCreateTables();
-
             try
             {
                 using (var client = new ImapClient())
@@ -56,11 +49,13 @@ namespace LunchViewerService.ScheduledJobs
 
                         if (unread_mails.Any())
                         {
+                            var context = new LunchViewerContext();
+
                             // Get message indices and set messages read flag
                             var indices = unread_mails.Select(s => s.Index).ToArray();
                             inbox.AddFlags(indices, MessageFlags.Seen, true, cancel.Token);
 
-                            var send_notification = false;
+                            var found_emails = false;
 
                             foreach (var summary in unread_mails)
                             {
@@ -73,21 +68,21 @@ namespace LunchViewerService.ScheduledJobs
                                     Menu menu;
                                     if (EmailHelper.TryParseMessage(message, out menu))
                                     {
-                                        SaveMenu(menu);
-                                        send_notification = true;
+                                        context.Menus.Add(menu);
+                                        found_emails = true;
                                     }
                                 }
                                 else
                                 {
-                                    var error_message = string.Format("Not a valid menu mail (subject {0})", message.Subject);
-
-                                    AddError("Invalid Mail", error_message);
-                                    Services.Log.Info(error_message);
+                                    Services.Log.Info(string.Format("Not a valid menu mail (subject {0})", message.Subject));
                                 }
                             }
 
-                            if (send_notification)
-                                await NotificationsHelper.SendNotificationAsync(Services);
+                            if (found_emails)
+                            {
+                                await context.SaveChangesAsync(cancel.Token);
+                                await NotificationsHelper.SendNotificationAsync(Services);                                
+                            }
                         }
 
                         client.Disconnect(true, cancel.Token);
@@ -96,41 +91,8 @@ namespace LunchViewerService.ScheduledJobs
             }
             catch (Exception e)
             {
-                AddError("General Error", string.Format("{0} {1}", e.GetType(), e.Message));
+                Services.Log.Error(string.Format("{0} {1}", e.GetType(), e.Message));
             }
-        }
-
-        private void GetOrCreateTables()
-        {
-            var storage_account = CloudStorageAccount.Parse(Services.Settings["StorageConnectionString"]);
-            var table_client = storage_account.CreateCloudTableClient();
-
-            menu_table = table_client.GetTableReference("Menus");
-            menu_table.CreateIfNotExists();
-
-            item_table = table_client.GetTableReference("Items");
-            item_table.CreateIfNotExists();
-
-            error_table = table_client.GetTableReference("Errors");
-            error_table.CreateIfNotExists();
-        }
-
-        private void AddError(string type, string message)
-        {
-            var error = new ErrorEntity(type, message);
-            var op = TableOperation.Insert(error);
-            error_table.Execute(op);
-        }
-
-        private void SaveMenu(Menu menu)
-        {
-            var menu_operation = TableOperation.Insert(menu.MenuEntity);
-            menu_table.Execute(menu_operation);
-
-            var items_batch_operation = new TableBatchOperation();
-            menu.ItemEntities.Apply(i => items_batch_operation.Add(TableOperation.Insert(i)));
-
-            item_table.ExecuteBatch(items_batch_operation);
         }
     }
 }

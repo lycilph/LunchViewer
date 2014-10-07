@@ -1,6 +1,8 @@
-﻿namespace LunchViewerService
+﻿using System.Web;
+
+namespace LunchViewerService
 {
-    public class WebApiApplication : System.Web.HttpApplication
+    public class WebApiApplication : HttpApplication
     {
         protected void Application_Start()
         {

@@ -1,58 +1,53 @@
-﻿using LunchViewerService.DataObjects;
-using LunchViewerService.Utils;
-using Microsoft.WindowsAzure.Mobile.Service;
-using System.Collections.Generic;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.OData;
-using System.Web.Http.OData.Builder;
-using System.Web.Http.OData.Query;
+using Microsoft.WindowsAzure.Mobile.Service;
+using LunchViewerService.DataObjects;
+using LunchViewerService.Models;
 
 namespace LunchViewerService.Controllers
 {
-    public class ItemController : TableController<ItemEntity>
+    public class ItemController : TableController<Item>
     {
         protected override void Initialize(HttpControllerContext controllerContext)
         {
             base.Initialize(controllerContext);
-            ConnectionStringUtil.InitializeConnectionString("StorageConnectionString", Services);
-            DomainManager = new StorageDomainManager<ItemEntity>("StorageConnectionString", "Items", Request, Services);
+            var context = new LunchViewerContext();
+            DomainManager = new EntityDomainManager<Item>(context, Request, Services);
         }
 
-        // GET tables/ItemEntity
-        public Task<IEnumerable<ItemEntity>> GetAllItemEntities()
+        // GET tables/Item
+        public IQueryable<Item> GetAllItem()
         {
-            var modelBuilder = new ODataConventionModelBuilder();
-            modelBuilder.EntitySet<ItemEntity>("Items");
-
-            var opts = new ODataQueryOptions(new ODataQueryContext(modelBuilder.GetEdmModel(), typeof(ItemEntity)), Request);
-            return DomainManager.QueryAsync(opts);
+            return Query(); 
         }
 
-        // GET tables/ItemEntity
-        public SingleResult<ItemEntity> GetItemEntity(string id)
+        // GET tables/Item/48D68C86-6EA6-4C25-AA33-223FC9A27959
+        public SingleResult<Item> GetItem(string id)
         {
             return Lookup(id);
         }
 
-        // PATCH tables/ItemEntity
-        public Task<ItemEntity> PatchItemEntity(string id, Delta<ItemEntity> patch)
+        // PATCH tables/Item/48D68C86-6EA6-4C25-AA33-223FC9A27959
+        public Task<Item> PatchItem(string id, Delta<Item> patch)
         {
-            return UpdateAsync(id, patch);
+             return UpdateAsync(id, patch);
         }
 
-        // POST tables/ItemEntity
-        public async Task<IHttpActionResult> PostItemEntity(ItemEntity item)
+        // POST tables/Item/48D68C86-6EA6-4C25-AA33-223FC9A27959
+        public async Task<IHttpActionResult> PostItem(Item item)
         {
-            var current = await InsertAsync(item);
+            Item current = await InsertAsync(item);
             return CreatedAtRoute("Tables", new { id = current.Id }, current);
         }
 
-        // DELETE tables/ItemEntity
-        public Task DeleteItemEntity(string id)
+        // DELETE tables/Item/48D68C86-6EA6-4C25-AA33-223FC9A27959
+        public Task DeleteItem(string id)
         {
-            return DeleteAsync(id);
+             return DeleteAsync(id);
         }
+
     }
 }

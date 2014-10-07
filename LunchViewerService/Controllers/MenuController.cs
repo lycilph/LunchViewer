@@ -1,58 +1,55 @@
-﻿using LunchViewerService.DataObjects;
-using LunchViewerService.Utils;
-using Microsoft.WindowsAzure.Mobile.Service;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.OData;
-using System.Web.Http.OData.Builder;
-using System.Web.Http.OData.Query;
+using Microsoft.WindowsAzure.Mobile.Service;
+using LunchViewerService.DataObjects;
+using LunchViewerService.Models;
 
 namespace LunchViewerService.Controllers
 {
-    public class MenuController : TableController<MenuEntity>
+    public class MenuController : TableController<Menu>
     {
         protected override void Initialize(HttpControllerContext controllerContext)
         {
             base.Initialize(controllerContext);
-            ConnectionStringUtil.InitializeConnectionString("StorageConnectionString", Services);
-            DomainManager = new StorageDomainManager<MenuEntity>("StorageConnectionString", "Menus", Request, Services);
+            var context = new LunchViewerContext();
+            DomainManager = new EntityDomainManager<Menu>(context, Request, Services);
         }
 
-        // GET tables/MenuEntity
-        public Task<IEnumerable<MenuEntity>> GetAllMenuEntities()
+        // GET tables/Menu
+        public IEnumerable<Menu> GetAllMenu()
         {
-            var modelBuilder = new ODataConventionModelBuilder();
-            modelBuilder.EntitySet<MenuEntity>("Menus");
-
-            var opts = new ODataQueryOptions(new ODataQueryContext(modelBuilder.GetEdmModel(), typeof(MenuEntity)), Request);
-            return DomainManager.QueryAsync(opts);
+            return Query().Include(m => m.Items).ToList();
         }
 
-        // GET tables/MenuEntity
-        public SingleResult<MenuEntity> GetMenuEntity(string id)
+        // GET tables/Menu/48D68C86-6EA6-4C25-AA33-223FC9A27959
+        public SingleResult<Menu> GetMenu(string id)
         {
             return Lookup(id);
         }
 
-        // PATCH tables/MenuEntity
-        public Task<MenuEntity> PatchMenuEntity(string id, Delta<MenuEntity> patch)
+        // PATCH tables/Menu/48D68C86-6EA6-4C25-AA33-223FC9A27959
+        public Task<Menu> PatchMenu(string id, Delta<Menu> patch)
         {
-            return UpdateAsync(id, patch);
+             return UpdateAsync(id, patch);
         }
 
-        // POST tables/MenuEntity
-        public async Task<IHttpActionResult> PostMenuEntity(MenuEntity item)
+        // POST tables/Menu/48D68C86-6EA6-4C25-AA33-223FC9A27959
+        public async Task<IHttpActionResult> PostMenu(Menu item)
         {
-            var current = await InsertAsync(item);
+            Menu current = await InsertAsync(item);
             return CreatedAtRoute("Tables", new { id = current.Id }, current);
         }
 
-        // DELETE tables/MenuEntity
-        public Task DeleteMenuEntity(string id)
+        // DELETE tables/Menu/48D68C86-6EA6-4C25-AA33-223FC9A27959
+        public Task DeleteMenu(string id)
         {
-            return DeleteAsync(id);
+             return DeleteAsync(id);
         }
+
     }
 }
