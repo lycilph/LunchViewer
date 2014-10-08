@@ -212,6 +212,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScheduledJobs\CleanupJob.cs" />
     <Compile Include="ScheduledJobs\SendNotificationJob.cs" />
     <Compile Include="Utils\EmailHelper.cs" />
     <Compile Include="Utils\NotificationsHelper.cs" />

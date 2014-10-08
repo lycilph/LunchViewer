@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -35,6 +34,7 @@ namespace LunchViewerService.ScheduledJobs
                     using (var cancel = new CancellationTokenSource())
                     {
                         client.Connect(uri, cancel.Token);
+
                         // Note: since we don't have an OAuth2 token, disable the XOAUTH2 authentication mechanism.
                         client.AuthenticationMechanisms.Remove("XOAUTH");
                         client.Authenticate(credentials, cancel.Token);
@@ -44,7 +44,7 @@ namespace LunchViewerService.ScheduledJobs
                         inbox.Open(FolderAccess.ReadWrite, cancel.Token);
 
                         // Get unread messages
-                        var unread_mails = inbox.Fetch(0, -1, MessageSummaryItems.Flags).Where(s => s.Flags.HasValue && !s.Flags.Value.HasFlag(MessageFlags.Seen)).ToList();
+                        var unread_mails = inbox.Fetch(0, -1, MessageSummaryItems.Flags).ToList().Where(s => s.Flags.HasValue && !s.Flags.Value.HasFlag(MessageFlags.Seen)).ToList();
                         Services.Log.Info(string.Format("Unread messages: {0}", unread_mails.Count()));
 
                         if (unread_mails.Any())
@@ -60,10 +60,11 @@ namespace LunchViewerService.ScheduledJobs
                             foreach (var summary in unread_mails)
                             {
                                 var message = inbox.GetMessage(summary.Index);
+                                Services.Log.Info(string.Format("[Mail] {0:D2}: {1}", summary.Index, message.Subject));
 
                                 if (EmailHelper.IsValidMenuMail(message))
                                 {
-                                    Services.Log.Info(string.Format("[Mail] {0:D2}: {1}", summary.Index, message.Subject));
+                                    Services.Log.Info(string.Format("Parsing menu (subject {0})", message.Subject));
 
                                     Menu menu;
                                     if (EmailHelper.TryParseMessage(message, out menu))
