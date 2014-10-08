@@ -29,18 +29,18 @@ namespace LunchViewerService.Models
         {
         } 
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        protected override void OnModelCreating(DbModelBuilder model_builder)
         {
             string schema = ServiceSettingsDictionary.GetSchemaName();
             if (!string.IsNullOrEmpty(schema))
             {
-                modelBuilder.HasDefaultSchema(schema);
+                model_builder.HasDefaultSchema(schema);
             }
 
-            modelBuilder.Entity<Item>().Property(i => i.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            modelBuilder.Entity<Menu>().Property(m => m.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            model_builder.Entity<Item>().Property(i => i.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            model_builder.Entity<Menu>().Property(m => m.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            modelBuilder.Conventions.Add(
+            model_builder.Conventions.Add(
                 new AttributeToColumnAnnotationConvention<TableColumnAttribute, string>(
                     "ServiceTableColumn", (property, attributes) => attributes.Single().ColumnType.ToString()));
         }

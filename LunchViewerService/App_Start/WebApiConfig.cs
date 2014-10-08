@@ -19,6 +19,8 @@ namespace LunchViewerService
             // line. Comment it out again when you deploy your service for production use.
             config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
 
+            config.EnableQuerySupport();
+
             Database.SetInitializer(new LunchViewerInitializer());
         }
 

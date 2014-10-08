@@ -216,6 +216,7 @@
     <Compile Include="ScheduledJobs\SendNotificationJob.cs" />
     <Compile Include="Utils\EmailHelper.cs" />
     <Compile Include="Utils\NotificationsHelper.cs" />
+    <Compile Include="Utils\QueryableExpandAttribute.cs" />
     <Compile Include="Utils\SimpleAES.cs" />
   </ItemGroup>
   <ItemGroup>

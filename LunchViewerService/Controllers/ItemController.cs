@@ -11,9 +11,9 @@ namespace LunchViewerService.Controllers
 {
     public class ItemController : TableController<Item>
     {
-        protected override void Initialize(HttpControllerContext controllerContext)
+        protected override void Initialize(HttpControllerContext controller_context)
         {
-            base.Initialize(controllerContext);
+            base.Initialize(controller_context);
             var context = new LunchViewerContext();
             DomainManager = new EntityDomainManager<Item>(context, Request, Services);
         }
