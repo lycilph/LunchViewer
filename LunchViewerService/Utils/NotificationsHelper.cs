@@ -18,7 +18,7 @@ namespace LunchViewerService.Utils
             var registrations = await hub.GetAllRegistrationsAsync(Int32.MaxValue);
             if (registrations.Any())
             {
-                var google_outcome = await hub.SendGcmNativeNotificationAsync("{ \"message\": \"NewData\" }");
+                var google_outcome = await hub.SendGcmNativeNotificationAsync("{\"data\" : { \"message\": \"NewData\" }}");
                 services.Log.Info(string.Format("Notification outcome (google gcm) {0}", google_outcome.State));
             }
         }
