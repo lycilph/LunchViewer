@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceDefinition name="MailService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2014-06.2.4">
+  <WorkerRole name="MailWorkerRole" vmsize="Small">
+    <Imports>
+      <Import moduleName="Diagnostics" />
+    </Imports>
+    <Endpoints>
+      <InputEndpoint name="email" protocol="tcp" port="25" />
+    </Endpoints>
+    <ConfigurationSettings>
+      <Setting name="DomainName" />
+      <Setting name="StorageAccount" />
+    </ConfigurationSettings>
+  </WorkerRole>
+</ServiceDefinition>

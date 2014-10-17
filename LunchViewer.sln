@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LunchViewerService", "LunchViewerService\LunchViewerService.csproj", "{209FA716-A7AD-4095-BD70-C8710FC66FA7}"
 EndProject
@@ -10,6 +10,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{0C64A0
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
+EndProject
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "MailService", "MailService\MailService.ccproj", "{01E03FE5-ED4C-4F20-BDB5-34856A80CF68}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MailWorkerRole", "MailWorkerRole\MailWorkerRole.csproj", "{82764160-0233-40C5-B6E5-AC7751E32091}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailSender", "EmailSender\EmailSender.csproj", "{A03023B9-F0D8-4959-B641-A1CEC1066EC8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +35,30 @@ Global
 		{209FA716-A7AD-4095-BD70-C8710FC66FA7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{209FA716-A7AD-4095-BD70-C8710FC66FA7}.Release|ARM.ActiveCfg = Release|Any CPU
 		{209FA716-A7AD-4095-BD70-C8710FC66FA7}.Release|x86.ActiveCfg = Release|Any CPU
+		{01E03FE5-ED4C-4F20-BDB5-34856A80CF68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01E03FE5-ED4C-4F20-BDB5-34856A80CF68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01E03FE5-ED4C-4F20-BDB5-34856A80CF68}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{01E03FE5-ED4C-4F20-BDB5-34856A80CF68}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{01E03FE5-ED4C-4F20-BDB5-34856A80CF68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01E03FE5-ED4C-4F20-BDB5-34856A80CF68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01E03FE5-ED4C-4F20-BDB5-34856A80CF68}.Release|ARM.ActiveCfg = Release|Any CPU
+		{01E03FE5-ED4C-4F20-BDB5-34856A80CF68}.Release|x86.ActiveCfg = Release|Any CPU
+		{82764160-0233-40C5-B6E5-AC7751E32091}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82764160-0233-40C5-B6E5-AC7751E32091}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82764160-0233-40C5-B6E5-AC7751E32091}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{82764160-0233-40C5-B6E5-AC7751E32091}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{82764160-0233-40C5-B6E5-AC7751E32091}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82764160-0233-40C5-B6E5-AC7751E32091}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82764160-0233-40C5-B6E5-AC7751E32091}.Release|ARM.ActiveCfg = Release|Any CPU
+		{82764160-0233-40C5-B6E5-AC7751E32091}.Release|x86.ActiveCfg = Release|Any CPU
+		{A03023B9-F0D8-4959-B641-A1CEC1066EC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A03023B9-F0D8-4959-B641-A1CEC1066EC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A03023B9-F0D8-4959-B641-A1CEC1066EC8}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{A03023B9-F0D8-4959-B641-A1CEC1066EC8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A03023B9-F0D8-4959-B641-A1CEC1066EC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A03023B9-F0D8-4959-B641-A1CEC1066EC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A03023B9-F0D8-4959-B641-A1CEC1066EC8}.Release|ARM.ActiveCfg = Release|Any CPU
+		{A03023B9-F0D8-4959-B641-A1CEC1066EC8}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="MailService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2014-06.2.4">
+  <Role name="MailWorkerRole">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=lunchviewer;AccountKey=ClyxpqekYgpHcR1qYoi9s+LQYehryonaAnug6ZYb2Ske7hfjNoskQdyiVK9ZLgx7Ar5ZNol1tomyJ7DlAm9RvQ==" />
+      <Setting name="DomainName" value="lunchviewer.cloudapp.net" />
+      <Setting name="StorageAccount" value="UseDevelopmentStorage=true" />
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>
