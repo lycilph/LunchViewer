@@ -3,7 +3,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using MailWorkerRole.CSES.SmtpServer;
+using MailWorkerRole.Utils;
+using Microsoft.WindowsAzure;
+using Microsoft.WindowsAzure.ServiceRuntime;
+using Microsoft.WindowsAzure.Storage;
 using MimeKit;
+using RestSharp;
 
 namespace MailWorkerRole.CSES.Implementation
 {
@@ -12,21 +17,52 @@ namespace MailWorkerRole.CSES.Implementation
         public bool SpoolMessage(SMTPMessage message)
         {
             Trace.TraceInformation("Spooling message from " + message.FromAddress);
-            Trace.TraceInformation(message.Data);
 
+            var domain = RoleEnvironment.GetConfigurationSettingValue("MobileServiceDomainName");
+
+            var storage_account = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageAccount"));
+            var blob_client = storage_account.CreateCloudBlobClient();
+            var container = blob_client.GetContainerReference("email");
+            container.CreateIfNotExists();
+
+            // Forward message to mobile service
             using (var s = new MemoryStream(Encoding.UTF8.GetBytes(message.Data)))
             {
                 var mime_message = MimeMessage.Load(s);
                 Trace.TraceInformation("Part count: " + mime_message.BodyParts.Count());
 
-                foreach (var part in mime_message.BodyParts)
+                var part = mime_message.BodyParts.SingleOrDefault(p => p.ContentType.MimeType == "text/html");
+                if (part != null)
                 {
-                    Trace.TraceInformation("{0} - {1} - {2}", part.ContentType.MimeType, part.ContentType.MediaType, part.ContentType.MediaSubtype);
-                    if (part.ContentType.MimeType == "text/html")
-                        Trace.TraceInformation("Text: " + ((TextPart) part).Text.Trim());
+                    var text_part = part as TextPart;
+                    if (text_part != null)
+                    {
+                        var text = text_part.Text.Trim();
+
+                        Trace.TraceInformation("Saving mail in blob storage");
+
+                        // Save message in blob storage
+                        var id = text.ComputeMD5Hash();
+                        var block = container.GetBlockBlobReference(id);
+                        block.UploadText(message.Data);
+
+                        Trace.TraceInformation("Forwarding content to {0}", domain);
+
+                        var client = new RestClient(domain);
+                        var request = new RestRequest("api/Mail", Method.POST);
+                        request.AddParameter("text/xml", text, ParameterType.RequestBody);
+
+                        var response = client.Execute(request);
+                        if (!string.IsNullOrWhiteSpace(response.ErrorMessage))
+                            Trace.TraceError("Mail api error: " + response.ErrorMessage);
+                        else
+                            Trace.TraceInformation("Mail api response ({0}): {1}", response.StatusCode, response.Content);
+                    }
                     else
-                        Trace.TraceInformation("Wrong message type");
+                        Trace.TraceWarning("Part could not be cast to TextPart");
                 }
+                else
+                    Trace.TraceWarning("Unknown content found");
             }
 
             return true;

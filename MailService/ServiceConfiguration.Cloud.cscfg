@@ -6,6 +6,7 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=lunchviewer;AccountKey=ClyxpqekYgpHcR1qYoi9s+LQYehryonaAnug6ZYb2Ske7hfjNoskQdyiVK9ZLgx7Ar5ZNol1tomyJ7DlAm9RvQ==" />
       <Setting name="DomainName" value="lunchviewer.cloudapp.net" />
       <Setting name="StorageAccount" value="UseDevelopmentStorage=true" />
+      <Setting name="MobileServiceDomainName" value="https://lunchviewer.azure-mobile.net/" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

@@ -6,6 +6,7 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="DomainName" value="lunchviewer.cloudapp.net" />
       <Setting name="StorageAccount" value="UseDevelopmentStorage=true" />
+      <Setting name="MobileServiceDomainName" value="http://localhost:58707" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

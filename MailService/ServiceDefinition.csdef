@@ -10,6 +10,7 @@
     <ConfigurationSettings>
       <Setting name="DomainName" />
       <Setting name="StorageAccount" />
+      <Setting name="MobileServiceDomainName" />
     </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>

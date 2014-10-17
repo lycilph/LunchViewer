@@ -135,8 +135,7 @@ namespace MailWorkerRole.CSES.SmtpServer
 		/// </summary>
 		public String ReadLine()
 		{
-			// If we already buffered another line, just return
-			// from the buffer.			
+			// If we already buffered another line, just return from the buffer.			
 			var output = ReadBuffer();
 			if( output != null )
 			{
@@ -144,25 +143,23 @@ namespace MailWorkerRole.CSES.SmtpServer
 			}
 						
 			// Otherwise, read more input.
-			var byteBuffer = new byte[80];
+			var byte_buffer = new byte[80];
 
 		    // Read from the socket until an entire line has been read.			
 			do
 			{
 				// Read the input data.
-				var count = socket.Receive( byteBuffer );
+				var count = socket.Receive( byte_buffer );
 				if( count == 0 )
 				{
 					Trace.TraceWarning( "Socket closed before end of line received.");
 					return null;
 				}
 
-				input_buffer.Append( encoding.GetString( byteBuffer, 0, count ) );				
-				Trace.TraceInformation("Connection {0}: Read: {1}", connection_id, input_buffer);
+				input_buffer.Append( encoding.GetString( byte_buffer, 0, count ) );				
+				//Trace.TraceInformation("Connection {0}: Read: {1}", connection_id, input_buffer);
 			}
 			while( (output = ReadBuffer()) == null );
-			
-			// IO Log statement is in ReadBuffer...
 			
 			return output;
 		}
@@ -195,19 +192,18 @@ namespace MailWorkerRole.CSES.SmtpServer
 		private string ReadBuffer()
 		{
 			// If the buffer has data, check for a full line.
-			if( input_buffer.Length > 0 )				
-			{
-				var buffer = input_buffer.ToString();
-				var eolIndex = buffer.IndexOf( EOL, StringComparison.InvariantCulture );
-				if( eolIndex != -1 )
-				{
-					var output = buffer.Substring( 0, eolIndex );
-					input_buffer = new StringBuilder( buffer.Substring( eolIndex + 2 ) );
-					Trace.TraceInformation("Connection {0}: Read Line: {1}", connection_id, output);
-					return output;
-				}				
-			}
-			return null;
+            if (input_buffer.Length <= 0) 
+                return null;
+
+            var buffer = input_buffer.ToString();
+            var eol_index = buffer.IndexOf( EOL, StringComparison.InvariantCulture );
+            if (eol_index == -1) 
+                return null;
+
+            var output = buffer.Substring( 0, eol_index );
+            input_buffer = new StringBuilder( buffer.Substring( eol_index + 2 ) );
+            //Trace.TraceInformation("Connection {0}: Read Line: {1}", connection_id, output);
+            return output;
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using LunchViewerService.Models;
 using Microsoft.WindowsAzure.Mobile.Service;
 
@@ -15,6 +16,9 @@ namespace LunchViewerService
             // Use this class to set WebAPI configuration options
             var config = ServiceConfig.Initialize(new ConfigBuilder(options));
 
+            // I have no idea what this means :-)
+            config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
+
             // To display errors in the browser during development, uncomment the following
             // line. Comment it out again when you deploy your service for production use.
             config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
@@ -22,9 +26,10 @@ namespace LunchViewerService
             Database.SetInitializer(new LunchViewerInitializer());
         }
 
-        public class LunchViewerInitializer : 
+        public class LunchViewerInitializer :
             //DropCreateDatabaseAlways<LunchViewerContext> {}
-            ClearDatabaseSchemaIfModelChanges<LunchViewerContext> { }
+            ClearDatabaseSchemaIfModelChanges<LunchViewerContext> {}
+        
     }
 }
 

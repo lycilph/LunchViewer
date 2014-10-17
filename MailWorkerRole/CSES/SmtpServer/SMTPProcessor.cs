@@ -420,21 +420,18 @@ namespace MailWorkerRole.CSES.SmtpServer
 		/// Parses a valid email address out of the input string and return it.
 		/// Null is returned if no address is found.
 		/// </summary>
-		private string ParseAddress( string input )
+		private static string ParseAddress( string input )
 		{
 			var match = ADDRESS_REGEX.Match( input );
-            if( match.Success )
-			{
-				string matchText = match.Value;
-				
-				// Trim off the :< chars
-				matchText = matchText.Remove( 0, 1 );
-				// trim off the . char.
-				matchText = matchText.Remove( matchText.Length - 1, 1 );
-				
-				return matchText;
-			}
-			return null;
+            if (!match.Success) 
+                return null;
+
+            var match_text = match.Value;
+            // Trim off the :< chars
+            match_text = match_text.Remove( 0, 1 );
+            // trim off the . char.
+            match_text = match_text.Remove( match_text.Length - 1, 1 );
+            return match_text;
 		}
 	}
 }
