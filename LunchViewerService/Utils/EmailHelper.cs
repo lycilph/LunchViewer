@@ -1,16 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Web.Http;
 using HtmlAgilityPack;
 using LunchViewerService.DataObjects;
 using System;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.WindowsAzure.Mobile.Service;
 
 namespace LunchViewerService.Utils
 {
     public static class EmailHelper
     {
-        public static bool TryParseMessage(string message, out Menu menu)
+        public static bool TryParseMessage(ApiServices services, string message, out Menu menu)
         {
             var doc = new HtmlDocument();
             doc.LoadHtml(message);
@@ -21,7 +23,7 @@ namespace LunchViewerService.Utils
             if (matches.Count > 0)
                 week = int.Parse(matches[0].Groups[2].ToString());
             var year = DateTime.Now.Year;
-
+            
             menu = new Menu { Year = year, Week = week, Items = new List<Item>() };
 
             // Find the individual items (or days)
@@ -39,6 +41,8 @@ namespace LunchViewerService.Utils
 
                 menu.Items.Add(new Item { Date = date, Text = text, Link = link });
             }
+
+            services.Log.Info(string.Format("Found week {0}, year {1}, items {2}", week, year, menu.Items.Count()));
 
             // Success if we found any items and a valid week number
             return week > -1 && menu.Items.Any();

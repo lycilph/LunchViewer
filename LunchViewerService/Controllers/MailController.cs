@@ -8,9 +8,11 @@ using LunchViewerService.DataObjects;
 using LunchViewerService.Models;
 using LunchViewerService.Utils;
 using Microsoft.WindowsAzure.Mobile.Service;
+using Microsoft.WindowsAzure.Mobile.Service.Security;
 
 namespace LunchViewerService.Controllers
 {
+    [AuthorizeLevel(AuthorizationLevel.Anonymous)]
     public class MailController : ApiController
     {
         private LunchViewerContext context;
@@ -29,9 +31,8 @@ namespace LunchViewerService.Controllers
             Services.Log.Info(string.Format("Received a mail"));
 
             var message = await Request.Content.ReadAsStringAsync();
-
             Menu menu;
-            if (!EmailHelper.TryParseMessage(message, out menu))
+            if (!EmailHelper.TryParseMessage(Services, message, out menu))
                 return Request.CreateBadRequestResponse("Could not parse message");
 
             if (context.Menus.FirstOrDefault(m => m.Year == menu.Year && m.Week == menu.Week) != null)

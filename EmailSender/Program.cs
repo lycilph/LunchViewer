@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Net.Mail;
 using System.Reflection;
 
@@ -40,7 +41,7 @@ namespace EmailSender
                     switch (key.KeyChar)
                     {
                         case '1':
-                            using (var client = new SmtpClient("localhost", 25))
+                            using (var client = GetClient())
                             {
                                 client.Send(mail_message);
                             }
@@ -65,6 +66,22 @@ namespace EmailSender
             {
                 Console.WriteLine(se);
             }
+        }
+
+        private static SmtpClient GetClient(bool is_debug = false)
+        {
+            if (is_debug)
+                return new SmtpClient("localhost", 25);
+
+            return new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential("lycilph@gmail.com", "ohxixijyrwqnbbfs")
+            };
         }
     }
 }
