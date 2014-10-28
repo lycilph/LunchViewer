@@ -193,6 +193,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\ItemController.cs" />
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
